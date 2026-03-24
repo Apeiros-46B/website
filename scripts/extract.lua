@@ -1,0 +1,64 @@
+-- THIS SCRIPT MUST BE RUN IN NEOVIM
+-- extract treesitter highlights from a file
+-- nvim --headless -c "luafile extract.lua" YOUR_FILE > YOUR_OUTPUT.lua
+local bufnr = vim.api.nvim_get_current_buf()
+local lang = vim.bo.filetype
+if lang == '' then vim.cmd('qa!') end
+
+local parser = vim.treesitter.get_parser(bufnr, lang)
+parser:parse(true)
+
+local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+local result_lines = {}
+
+for r = 0, #lines - 1 do
+	local line = lines[r+1]
+	if r < #lines - 1 then
+		line = line .. '\n'
+	end
+
+	local chunks = {}
+	local current_hl = nil
+	local current_str = ''
+
+	for c = 0, string.len(line) - 1 do
+		local captures = vim.treesitter.get_captures_at_pos(bufnr, r, c)
+
+		local hl = ''
+		-- last capture in the array has the highest priority
+		for i = #captures, 1, -1 do
+			local name = captures[i].capture
+			if name ~= 'spell' and name ~= 'nospell' then
+				hl = name
+				break
+			end
+		end
+
+		local char = string.sub(line, c + 1, c + 1)
+
+		if hl == current_hl then
+			current_str = current_str .. char
+		else
+			if current_str ~= '' then
+				chunks[#chunks+1] = string.format('{"%s", %q}', current_hl, current_str)
+			end
+			current_hl = hl
+			current_str = char
+		end
+	end
+
+	if current_str ~= '' then
+		chunks[#chunks+1] = string.format('{"%s", %q}', current_hl, current_str)
+	end
+
+	result_lines[#result_lines+1] = '  {' .. table.concat(chunks, ', ') .. '}'
+end
+
+local out_path = os.getenv('EXTRACT_OUT') or 'extract_out.lua'
+local out_file = io.open(out_path, 'w')
+if out_file then
+	out_file:write('return {\n' .. table.concat(result_lines, ',\n') .. '\n}\n')
+	out_file:close()
+end
+
+vim.cmd('qa!')
