@@ -71,7 +71,7 @@ GlobalStyles(2, {
 		bg1 = '#ebebeb',
 		bg2 = '#f4f4f4',
 		bg3 = '#ffffff',
-		bg4 = '#fafafa',
+		bg4 = '#f4f4f4',
 		fg1 = '#333333',
 		fg2 = '#777777',
 		fg3 = '#202020',

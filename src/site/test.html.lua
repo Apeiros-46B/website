@@ -9,10 +9,10 @@ return Article {
 	head = {},
 	content = {
 		p {
-			"I've recently added some new things to my website using my ",
+			"I've recently added some things to the rewrite of my website using my ",
 			a {
 				href = 'https://github.com/Apeiros-46B/lwk',
-				'Lua static site generator',
+				'Lua-based SSG',
 			},
 			'.',
 		},
