@@ -6,13 +6,8 @@ local names = {
 
 GlobalStyles {
 	Rule '.callout' {
-		width = fit_content,
-		max_width = pct(100),
-		padding = rem(1),
 		font_size = pct(90),
-		color = var 'fg2',
-		background_color = var 'bg2',
-		border_left = { var 'ornament_thickness', solid, var 'accent_color' },
+		color = var 'fg_dim',
 
 		Vars '&.callout-info' {
 			accent_color = var 'aqua',
@@ -35,15 +30,19 @@ return Component.new('Callout', function(_, _, args, _)
 	local level_name = names[args.level]
 
 	return aside {
-		class = 'callout callout-' .. args.level,
+		class = 'card callout callout-' .. args.level,
 		role = 'note',
-		aria_label = level_name,
+		If (args.title) {
+			Set('aria_label', args.title),
+		} {
+			Set('aria_label', level_name),
+		},
 
 		div {
 			class = 'callout-title',
 			aria_hidden = true, -- prevent reading the title twice
 
-			level_name,
+			If (args.title) { args.title } { level_name },
 		},
 
 		args.content,

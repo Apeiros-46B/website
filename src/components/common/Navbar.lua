@@ -14,8 +14,8 @@ local pages = {
 	},
 	{
 		name = 'blog',
-		rel_path = 'blog', -- used as a prefix match if needed
-		url = '/blog',
+		rel_path = '',
+		url = '/blog/index.html',
 	},
 }
 
@@ -28,15 +28,16 @@ GlobalStyles {
 		width = rem(1.2),
 		height = rem(1.2),
 		padding = px(padding_px),
-		color = var 'blue',
+		color = var 'fg_accent',
+		background_color = var 'bg_lowered',
 	},
 
 	Rule 'header#navbar-header' {
 		top = 0,
 		position = sticky,
 		margin_top = rem(1),
-		background_color = var 'bg1',
-		border_bottom = { rem(1), solid, var 'bg3' },
+		background_color = var 'bg_base',
+		border_bottom = { rem(1), solid, var 'bg_main' },
 	},
 
 	Rule '#navbar' {
@@ -53,16 +54,16 @@ GlobalStyles {
 			flex_shrink = 0,
 			padding = { px(padding_px), px(3 * padding_px) };
 			text_decoration = none,
+			background_color = var 'bg_lowered',
 
+			Rule '&.active' {
+				color = var 'fg_main',
+				background_color = var 'bg_main',
+			},
 			Rule '&:hover' {
 				text_decoration = underline,
-				background_color = var 'bg2',
 			},
-			Rule '&.active' {
-				font_weight = bold,
-				background_color = var 'bg3',
-			},
-			Rule '&:last-child' { -- TODO: idk what this does but it might be important
+			Rule '&:last-child' {
 				margin_right = rem(4),
 			}
 		},

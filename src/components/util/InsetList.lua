@@ -1,7 +1,5 @@
-local class = 'inset-list'
-
 GlobalStyles {
-	Rule ('ul.' .. class) {
+	Rule 'ul.inset-list' {
 		margin_left = rem(1),
 		margin_right = rem(1),
 		font_size = pct(90),
@@ -12,4 +10,4 @@ GlobalStyles {
 	},
 }
 
-return ul { class = class }
+return ul { class = 'inset-list' }

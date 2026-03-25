@@ -68,34 +68,22 @@ GlobalStyles(2, {
 		blue   = '#535d9c',
 		purple = '#79508a',
 
-		bg1 = '#ebebeb',
-		bg2 = '#f4f4f4',
-		bg3 = '#ffffff',
-		bg4 = '#f4f4f4',
-		fg1 = '#333333',
-		fg2 = '#777777',
-		fg3 = '#202020',
+		bg_base = '#ebebeb',
+		bg_main = '#ffffff',
+		bg_raised = '#f4f4f4',
+		bg_lowered = '#f2f2f2',
+		bg_accent = '#535d9c1A',
 
-		sep = '#ebebeb',
-		bg_hl = '#535d9c1A',
-		fg_hl = var 'blue',
+		fg_main = '#333333',
+		fg_strong = '#202020',
+		fg_dim = '#777777',
+		fg_sep = '#ebebeb',
+		fg_accent = '#535d9c',
 
-		code_operator = var 'orange',
 		code_modifier = var 'orange',
 		code_keyword = var 'blue',
-		code_literal = var 'purple',
-		code_string = var 'aqua',
-		code_escape = var 'yellow',
-		code_constant = var 'purple',
 		code_field = var 'red',
-		code_function = var 'green',
-		code_type = var 'yellow',
 		code_module = var 'red',
-		code_special = var 'purple',
-
-		code_emph_weight = 600,
-
-		ornament_thickness = px(4),
 	},
 
 	Query '@media' { prefers_color_scheme = 'dark' } {
@@ -109,33 +97,43 @@ GlobalStyles(2, {
 			blue   = '#7fbbb3',
 			purple = '#d699b6',
 
-			bg1 = '#2b3339',
-			bg2 = '#2d373d',
-			bg3 = '#323c41',
-			bg4 = '#3a454a',
-			fg1 = '#d3c6aa',
-			fg2 = '#859289',
-			fg3 = '#d3c6aa',
+			bg_base = '#2b3339',
+			bg_main = '#323c41',
+			bg_raised = '#3a454a',
+			bg_lowered = '#2d373d',
+			bg_accent = '#404d44',
 
-			sep = '#445055',
-			bg_hl = '#404d44',
-			fg_hl = var 'green',
+			fg_main = '#d3c6aa',
+			fg_strong = '#d3c6aa',
+			fg_dim = '#859289',
+			fg_sep = '#445055',
+			fg_accent = '#a7c080',
 
 			code_modifier = var 'red',
 			code_keyword = var 'red',
 			code_field = var 'blue',
 			code_module = var 'orange',
-
-			code_emph_weight = 600,
 		},
 	},
 
 	Vars ':root' {
 		internal_link = var 'blue',
-		external_link = var 'green',
+		external_link = var 'aqua',
 		scrollbar_thumb = var 'purple',
-		scrollbar_track = var 'bg3',
+		scrollbar_track = var 'bg_main',
 		scrollbar_width = px(4),
+		ornament_thickness = px(4),
+
+		code_operator = var 'orange',
+		code_literal = var 'purple',
+		code_string = var 'aqua',
+		code_escape = var 'yellow',
+		code_constant = var 'purple',
+		code_function = var 'green',
+		code_type = var 'yellow',
+		code_special = var 'purple',
+
+		code_emph_weight = 600,
 	},
 	-- }}}
 
@@ -143,13 +141,22 @@ GlobalStyles(2, {
 	Rule 'body' {
 		margin_left = rem(1),
 		margin_right = rem(1),
-		font_family = 'IBM Plex Sans',
+		font_family = Quoted 'IBM Plex Sans',
 		font_size = pct(120),
-		color = var 'fg1',
-		background_color = var 'bg1',
+		color = var 'fg_main',
+		background_color = var 'bg_base',
+	},
+	Rule 'hr' {
+		border = none,
+		border_top = { px(2), solid, var 'fg_sep' },
+		color = var 'fg_sep',
 	},
 	Rule 'h1' {
 		font_size = pct(150),
+		font_weight = bold,
+	},
+	Rule 'h2' {
+		font_size = pct(120),
 		font_weight = bold,
 	},
 	Rule 'li, p' {
@@ -168,15 +175,23 @@ GlobalStyles(2, {
 		max_width = pct(100),
 	},
 	Rule 'figcaption' {
-		color = var 'fg2',
+		color = var 'fg_dim',
 		font_size = pct(80),
 	},
 	Rule 'pre' {
+		line_height = pct(120),
+	},
+	Rule 'pre > code' {
+		padding = 0,
+		background_color = transparent,
+	},
+	Rule 'code, kbd, samp' {
+		padding = { px(0), px(8) },
 		font_family = Quoted 'IBM Plex Mono',
 		font_size = pct(90),
-		line_height = pct(120),
 		tab_size = 2,
 		_moz_tab_size = 2,
+		background_color = var 'bg_raised',
 	},
 
 	Query '@supports' 'selector(::-webkit-scrollbar)' {
@@ -211,4 +226,10 @@ GlobalStyles(2, {
 		white_space = nowrap,
 		border = 0,
 	},
+
+	Query '@media' 'screen and (prefers-reduced-motion: no-preference)' {
+		Rule 'html' {
+			scroll_behaviour = smooth,
+		}
+	}
 })

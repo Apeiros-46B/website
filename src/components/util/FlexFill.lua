@@ -1,9 +1,7 @@
-local class = 'flex-fill'
-
 GlobalStyles {
-	Rule ('.' .. class) {
+	Rule '.flex-fill' {
 		flex_grow = 1,
 	},
 }
 
-return div { class = class }
+return div { class = 'flex-fill' }

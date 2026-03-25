@@ -1,7 +1,5 @@
-local class = 'horiz-list'
-
 GlobalStyles {
-	Rule ('ul.' .. class) {
+	Rule 'ul.horiz-list' {
 		font_size = pct(90),
 		list_style_type = none,
 		margin_left = 0,
@@ -19,5 +17,4 @@ GlobalStyles {
 	},
 }
 
--- partial application
-return ul { class = class }
+return ul { class = 'horiz-list' }

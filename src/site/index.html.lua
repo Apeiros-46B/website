@@ -20,6 +20,7 @@ local projects = {
 }
 
 -- TODO: move into SpillHorizList component
+-- TODO: fix, no longer works in the new layout
 GlobalStyles {
 	Query '@container' { min_width = '355px' } {
 		Rule '#socials-outer' {
@@ -42,12 +43,11 @@ GlobalStyles {
 }
 
 return Page {
-	title = "Apeiros' homepage",
-	description = '',
+	title = "apeiros.xyz",
+	description = "Apeiros's homepage",
 	head = {},
-	left_sidebar = p 'Hello',
-	right_sidebar = p 'world',
 	content = {
+		h1 'apeiros.xyz',
 		div {
 			id = 'socials-outer',
 			HorizList {
@@ -77,7 +77,7 @@ return Page {
 		},
 		section {
 			id = 'projects',
-			h1 'Projects',
+			h2 'Projects',
 			p {
 				'These are some of my projects. See the ',
 				a { href = '/projects.html', 'dedicated page' },

@@ -5,7 +5,7 @@ local function ornament_border(color)
 	return { var 'ornament_thickness', solid, var(color) }
 end
 
-local fake_border = 'linear-gradient(to right, var(--sep) var(--ornament-thickness), transparent var(--ornament-thickness))'
+local fake_border = 'linear-gradient(to right, var(--fg_sep) var(--ornament-thickness), transparent var(--ornament-thickness))'
 
 local ellipsis_html = '<span class="codeblock-line"><span class="codeblock-line-text"><span class="codeblock-comment">...</span></span></span>\n'
 
@@ -26,13 +26,13 @@ GlobalStyles {
 	},
 
 	Rule '.codeblock-outer' {
-		background_color = var 'bg2',
+		background_color = var 'bg_raised',
 	},
 	Rule '.codeblock-label' {
 		padding_left = rem(1),
 		padding_top = rem(1),
 		padding_bottom = rem(1),
-		border_left = ornament_border 'sep',
+		border_left = ornament_border 'fg_sep',
 	},
 
 	Rule '.codeblock-line' {
@@ -41,7 +41,7 @@ GlobalStyles {
 		width = pct(100),
 
 		Rule '&.highlighted' {
-			background_color = var 'bg_hl',
+			background_color = var 'bg_accent',
 		},
 	},
 
@@ -52,10 +52,10 @@ GlobalStyles {
 		left = 0, -- pinned to the left edge
 		flex_shrink = 0,
 		width = var 'ornament_thickness',
-		background_color = var 'sep',
+		background_color = var 'fg_sep',
 	},
 	Rule '.codeblock-line.highlighted::before' {
-		background_color = var 'fg_hl',
+		background_color = var 'fg_accent',
 	},
 
 	-- the actual underlying text content of the line, to group all fragments together
@@ -65,12 +65,13 @@ GlobalStyles {
 		padding_right = rem(1),
 	},
 
+	-- {{{ syntax highlighting
 	Rule '.codeblock-comment' {
-		color = var 'fg2',
+		color = var 'fg_dim',
 		font_style = italic,
 	},
 	Rule '.codeblock-punctuation' {
-		color = var 'fg1',
+		color = var 'fg_main',
 	},
 	Rule '.codeblock-punctuation-special' {
 		-- TODO: reflect upstream in elysium
@@ -114,7 +115,7 @@ GlobalStyles {
 		color = var 'code_constant',
 	},
 	Rule '.codeblock-variable' {
-		color = var 'fg3',
+		color = var 'fg_strong',
 	},
 	Rule '.codeblock-variable-builtin' {
 		color = var 'code_special',
@@ -150,6 +151,7 @@ GlobalStyles {
 	Rule '.codeblock-module' {
 		color = var 'code_module',
 	},
+	-- }}}
 }
 
 local class_cache = {}
