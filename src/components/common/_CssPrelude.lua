@@ -156,7 +156,11 @@ GlobalStyles(2, {
 		font_weight = bold,
 	},
 	Rule 'h2' {
-		font_size = pct(120),
+		font_size = pct(125),
+		font_weight = bold,
+	},
+	Rule 'h3' {
+		font_size = pct(110),
 		font_weight = bold,
 	},
 	Rule 'li, p' {
@@ -208,7 +212,7 @@ GlobalStyles(2, {
 	},
 	Query '@supports' 'not selector(::-webkit-scrollbar)' {
 		Rule '*' {
-			scrollbar_width = thin,
+			scrollbar_width = auto,
 			scrollbar_color = { var 'scrollbar_thumb', var 'scrollbar_track' },
 		}
 	},

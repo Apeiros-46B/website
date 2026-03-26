@@ -1,3 +1,6 @@
+-- ctx extra fields:
+-- 1. nav_active - if set, make the page with that name appear active even if rel_path doesn't match
+
 -- TODO: just move this into Page.lua. it will never be used elsewhere
 -- (or maybe paramterize it, and then instantiate in Page.lua with a specific pages arg and an ID arg so grid styling is decoupled from the IDs used here)
 -- TODO: replace with better router-based solution. hardcoded for now
@@ -14,7 +17,7 @@ local pages = {
 	},
 	{
 		name = 'blog',
-		rel_path = '',
+		rel_path = 'blog/index.html.lua',
 		url = '/blog/index.html',
 	},
 }

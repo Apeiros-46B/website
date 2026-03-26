@@ -9,26 +9,26 @@ local socials = {
 		username = 'apeiros46b',
 		url = 'https://x.com/apeiros46b',
 	},
-}
-
-local projects = {
 	{
-		name = 'zv',
-		desc = 'Real-time voxel rendering engine made using Zig and OpenGL',
-		extra = ' (WIP)',
+		platform = 'Email',
+		username = 'apeiros46@gmail.com',
+		url = 'mailto:apeiros46@gmail.com',
 	},
 }
 
--- TODO: move into SpillHorizList component
--- TODO: fix, no longer works in the new layout
 GlobalStyles {
-	Query '@container' { min_width = '355px' } {
+	Query '@media' { min_width = '550px' } {
+		Rule '#title' {
+			display = grid,
+			justify_content = center,
+		},
 		Rule '#socials-outer' {
 			display = grid,
 			justify_content = center,
 		},
 	},
-	Query '@container' { max_width = '354px' } {
+
+	Query '@media' { max_width = '550px' } {
 		Rule '#socials' {
 			display = flex,
 			flex_flow = { column, nowrap },
@@ -37,17 +37,21 @@ GlobalStyles {
 			Rule '&> li::after' { content = Quoted '' },
 		},
 	},
+
 	Rule '#socials > li > svg' {
 		margin_right = rem(0.5),
 	},
 }
 
 return Page {
-	title = "apeiros.xyz",
+	title = 'apeiros.xyz',
 	description = "Apeiros's homepage",
 	head = {},
 	content = {
-		h1 'apeiros.xyz',
+		h1 {
+			id = 'title',
+			'apeiros.xyz',
+		},
 		div {
 			id = 'socials-outer',
 			HorizList {
@@ -57,7 +61,7 @@ return Page {
 						FaIcon(entry.platform),
 						a {
 							href = entry.url,
-							aria_label = 'Link to ' .. entry.platform,
+							aria_label = entry.platform,
 							entry.username,
 						},
 					}
@@ -67,30 +71,28 @@ return Page {
 		p {
 			strong 'Hello, I am Apeiros!',
 			[[
-				I'm a Computer Science student at UBC, self-taught programmer, 3D artist,
-				photographer, and aspiring music producer. I primarily program using C++, Rust,
-				Zig and Lua, although I am also familiar with Java, Python, TypeScript, and
-				various other languages. I am interested in graphics programming, game
-				development, and OS development, and I'm also exploring web development and
-				system administration in my spare time.
-			]]
+				I'm a Computer Science student at UBC. I'm passionate about programming,
+				nature photography, and 3D art, and I dabble in a bit of electronic music
+				production and VFX.
+			]],
 		},
-		section {
-			id = 'projects',
-			h2 'Projects',
-			p {
-				'These are some of my projects. See the ',
-				a { href = '/projects.html', 'dedicated page' },
-				' for more information.'
+		p {
+			[[
+				I spend quite a lot of time writing programs for fun, and over the years I've
+				created many
+			]],
+			' ',
+			a {
+				href = '/projects.html',
+				'projects'
 			},
-			InsetList {
-				For (projects) (function(project)
-					return li {
-						a { href = '/projects.html#' .. project.name, project.name },
-						project.extra or '', ' · ', project.desc,
-					}
-				end),
-			},
+			' with varying degrees of usefulness.',
+			[[
+				Currently, I'm mainly interested in game development, graphics programming,
+				and compilers, although DSP and OS development are also areas that I might
+				start exploring soon. My favorite programming languages are Rust, Zig and Lua,
+				and I am also familiar with C++, Java, Python, TypeScript, and various others.
+			]],
 		},
 	},
 }

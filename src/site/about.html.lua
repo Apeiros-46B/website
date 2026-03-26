@@ -4,7 +4,7 @@ return Page {
 	about_shown = true,
 	head = {},
 	content = {
-		h1 'about',
+		h1 'About',
 		p {
 			'This website is built using ',
 			a {

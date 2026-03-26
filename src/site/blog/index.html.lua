@@ -1,8 +1,8 @@
 return Page {
-	title = 'apeiros.xyz - projects',
+	title = "apeiros.xyz - blog",
 	description = '',
 	head = {},
 	content = {
-		h1 'Projects',
+		h1 'Blog',
 	},
 }

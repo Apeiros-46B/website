@@ -2,6 +2,8 @@ local layout = require('src.data.layout')
 
 -- tags to skip for table of contents generation
 local skip_tags = {
+	-- pre is the most important, we don't want to walk thousands of syntax spans
+	-- because there shouldn't be headers inside them anyway
 	pre = true,
 	code = true,
 	p = true,
@@ -34,6 +36,10 @@ GlobalStyles {
 		}
 	},
 
+	-- TODO: make the table of contents header look like a "tab"
+	-- that says "table of contents" above the thing. maybe it's
+	-- not worth the effort, idk we can do it later it doesn't
+	-- affect content or router refactoring at all
 	Rule '.article-toc-header' {
 		margin_bottom = rem(0.5),
 		font_size = pct(110),
@@ -46,7 +52,8 @@ GlobalStyles {
 	},
 }
 
-local function extract_toc(content)
+-- {{{ generate a table of contents from the given node
+local function generate_toc(content)
 	local toc = {}
 	local stack = {}
 
@@ -99,9 +106,11 @@ local function extract_toc(content)
 
 	return toc
 end
+-- }}}
 
 return Component.new('Article', function(_, _, args, _)
-	local toc_tree = extract_toc(args.content)
+	-- {{{ create table of contents
+	local toc_tree = generate_toc(args.content)
 	local toc = nil
 	local toc_sidebar = nil
 	local toc_inline = nil
@@ -126,9 +135,11 @@ return Component.new('Article', function(_, _, args, _)
 			},
 		}
 	end
+	-- }}}
 
 	return Provide {
 		nav_active = 'blog',
+
 		Page {
 			title = args.title,
 			description = args.description,
@@ -144,7 +155,7 @@ return Component.new('Article', function(_, _, args, _)
 					p {
 						class = 'article-meta',
 						strong(args.description), br,
-						'Posted on ', args.date,
+						args.date,
 					},
 
 					If (args.tags) {
