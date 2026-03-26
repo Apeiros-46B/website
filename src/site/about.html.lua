@@ -6,19 +6,35 @@ return Page {
 	content = {
 		h1 'About',
 		p {
-			'This website is built using ',
+			'This website is powered by ',
 			a {
 				href = 'https://github.com/Apeiros-46B/lwk',
-				code 'lwk', ', my Lua-based static site generator.'
+				code 'lwk', ', my Lua SSG',
 			},
-		},
-		p {
-			'You can find the source code for ',
+			'. You can find the code for ',
 			a {
 				href = 'https://github.com/Apeiros-46B/www',
-				'the website itself here',
+				'the site here',
 			},
 			'.',
+		},
+		p {
+			'The light mode colorscheme is my own colorscheme, ',
+			a {
+				href = 'https://github.com/Apeiros-46B/elysium',
+				'elysium',
+			},
+			', and the dark mode colorscheme is ',
+			a {
+				href = 'https://github.com/sainnhe/everforest',
+				'Everforest',
+			},
+			' by sainnhe (Hard Dark variant, prior to ',
+			a {
+				href = 'https://github.com/sainnhe/everforest/commit/c7d3ffec0a4725c5154c824f0d036fa26a40232a',
+				'commit c7d3ffe',
+			},
+			').'
 		},
 	},
 }

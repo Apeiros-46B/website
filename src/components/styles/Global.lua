@@ -167,10 +167,10 @@ GlobalStyles(2, {
 		line_height = pct(140),
 	},
 	Rule 'a' {
-		color = var 'internal_link',
-	},
-	Rule "a[href*='//']" {
 		color = var 'external_link',
+	},
+	Rule "a[href^='/'], a[href^='#']" {
+		color = var 'internal_link',
 	},
 	Rule 'b, strong' {
 		font_weight = bold,

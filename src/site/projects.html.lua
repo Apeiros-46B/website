@@ -3,6 +3,7 @@ return Page {
 	description = '',
 	head = {},
 	content = {
-		h1 'Projects',
+		h1 'projects',
+		TagList { 'Lua', 'C++', 'Neovim' },
 	},
 }

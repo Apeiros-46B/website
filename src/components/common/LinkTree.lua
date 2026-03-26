@@ -1,3 +1,4 @@
+-- takes a list of tree nodes
 -- each tree node should have:
 -- href: passed to <a> as attr
 -- title: passed to <a> as content

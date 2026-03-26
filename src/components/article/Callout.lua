@@ -5,25 +5,28 @@ local names = {
 }
 
 GlobalStyles {
+	Vars '.card.callout' {
+		card_ornament_color = var 'callout_accent_color',
+	},
 	Rule '.callout' {
 		font_size = pct(90),
 		color = var 'fg_dim',
 
 		Vars '&.callout-info' {
-			accent_color = var 'aqua',
+			callout_accent_color = var 'aqua',
 		},
 		Vars '&.callout-warn' {
-			accent_color = var 'yellow',
+			callout_accent_color = var 'yellow',
 		},
 		Vars '&.callout-danger' {
-			accent_color = var 'red',
+			callout_accent_color = var 'red',
 		},
 
 		Rule '&> .callout-title' {
 			font_weight = bold,
-			color = var 'accent_color',
-		}
-	}
+			color = var 'callout_accent_color',
+		},
+	},
 }
 
 return Component.new('Callout', function(_, _, args, _)
