@@ -15,29 +15,22 @@ GlobalStyles {
 			font_weight = bold,
 			background_color = var 'bg_raised',
 		},
-
-		Rule '& a' {
-			text_decoration = none,
-			Rule '&:hover' {
-				text_decoration = underline,
-			},
-		},
 	},
 }
 
-return function(tags, mklink)
+return function(tags)
 	if not tags then return nil end
 
 	return ul {
 		class = 'tag-list',
 		For (tags) (function(tag)
-			if mklink then
-				return li(a {
-					href = mklink(tag),
-					tag,
-				})
-			else
+			if type(tag) == 'string' then
 				return li(tag)
+			elseif tag.href then
+				return li(a {
+					href = tag.href,
+					tag.name,
+				})
 			end
 		end)
 	}

@@ -82,7 +82,7 @@ GlobalStyles {
 		background_color = var 'bg_main',
 	},
 
-	Rule ':where(#content, section, article) > :nth-last-child(n+2)' {
+	Rule ':where(#content, section, article, details) > :nth-last-child(n+2):not(summary)' {
 		margin_bottom = rem(1),
 	},
 	Rule 'footer' {

@@ -130,7 +130,7 @@ GlobalStyles {
 		color = var 'code_special',
 	},
 	Rule '.codeblock-function' {
-		color = var 'green',
+		color = var 'code_function',
 	},
 	Rule '.codeblock-function-macro' {
 		-- TODO: reflect upstream in elysium
@@ -215,13 +215,20 @@ return Component.new('CodeBlock', function(_, _, args, _)
 			else
 				local class_str = class_cache[hl_group]
 				if not class_str then
-					local classes = {}
-					local current_class = 'codeblock'
-					for part in hl_group:gmatch('[^%.]+') do
-						current_class = current_class .. '-' .. part
-						classes[#classes+1] = current_class
+					if text == '{' or text == '}' then
+						-- HACK: always treat Lua table delimiters as punct instead of ctor
+						-- should probably be handled upstream in nvim config instead
+						class_str = 'codeblock-punctuation'
+					else
+						local classes = {}
+						local current_class = 'codeblock'
+						for part in hl_group:gmatch('[^%.]+') do
+							current_class = current_class .. '-' .. part
+							classes[#classes+1] = current_class
+						end
+						class_str = TABLE.concat(classes, ' ')
 					end
-					class_str = TABLE.concat(classes, ' ')
+
 					class_cache[hl_group] = class_str
 				end
 

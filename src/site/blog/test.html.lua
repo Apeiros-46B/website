@@ -16,12 +16,12 @@ return Article {
 			},
 		},
 		Section 'C3' {
-			CodeBlock {
-				label = 'src/sync/worker.rs',
-				data = require('src.data.code_hl.worker'),
-				range = { 77, 101 },
-				highlight = { { 98, 100 } },
-			},
+			-- CodeBlock {
+			-- 	label = 'src/sync/worker.rs',
+			-- 	data = require('src.data.code_hl.worker'),
+			-- 	range = { 77, 101 },
+			-- 	highlight = { { 98, 100 } },
+			-- },
 		},
 	},
 }

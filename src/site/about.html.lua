@@ -4,12 +4,12 @@ return Page {
 	about_shown = true,
 	head = {},
 	content = {
-		h1 'About',
+		h1 'about',
 		p {
 			'This website is powered by ',
 			a {
 				href = 'https://github.com/Apeiros-46B/lwk',
-				code 'lwk', ', my Lua SSG',
+				'lwk, my Lua SSG',
 			},
 			'. You can find the code for ',
 			a {

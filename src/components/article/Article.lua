@@ -119,21 +119,31 @@ return Component.new('Article', function(_, _, args, _)
 		toc = LinkTree(toc_tree)
 
 		local toc_base = nav {
-			aria_label = 'table of contents',
+			aria_label = 'Table of contents',
 			h2 {
 				class = 'article-toc-header',
-				'table of contents',
+				'Table of contents',
 			},
 		}
 
 		toc_sidebar = toc_base(toc)
 		toc_inline = toc_base {
-			-- TODO: way to merge components (`merge(toc_base, Card)`, Card wins)
 			class = 'card article-toc-inline',
 			details {
 				summary 'Click to expand',
 				toc,
 			},
+		}
+	end
+	-- }}}
+
+	-- {{{ create tag links
+	local tags = {}
+
+	for i, v in ipairs(args.tags) do
+		tags[i] = {
+			href = '/blog/tags/' .. v:lower() .. '.html',
+			name = v,
 		}
 	end
 	-- }}}
@@ -161,12 +171,7 @@ return Component.new('Article', function(_, _, args, _)
 						class = 'article-meta',
 						args.date,
 					},
-					TagList(
-						args.tags,
-						function(tag)
-							return '/blog/tags/' .. tag:lower() .. '.html'
-						end
-					),
+					TagList(tags),
 				},
 
 				If (toc_inline) { toc_inline },

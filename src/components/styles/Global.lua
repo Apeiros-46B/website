@@ -182,6 +182,14 @@ GlobalStyles(2, {
 		color = var 'fg_dim',
 		font_size = pct(80),
 	},
+	Rule 'code, kbd, samp' {
+		padding = { px(0), px(8) },
+		tab_size = 2,
+		_moz_tab_size = 2,
+		font_family = Quoted 'IBM Plex Mono',
+		font_size = pct(90),
+		background_color = var 'bg_raised',
+	},
 	Rule 'pre' {
 		line_height = pct(120),
 	},
@@ -189,13 +197,11 @@ GlobalStyles(2, {
 		padding = 0,
 		background_color = transparent,
 	},
-	Rule 'code, kbd, samp' {
-		padding = { px(0), px(8) },
-		font_family = Quoted 'IBM Plex Mono',
-		font_size = pct(90),
-		tab_size = 2,
-		_moz_tab_size = 2,
-		background_color = var 'bg_raised',
+	Rule 'summary' {
+		font_style = italic,
+	},
+	Rule 'details > :nth-child(2)' {
+		margin_top = rem(1),
 	},
 
 	Query '@supports' 'selector(::-webkit-scrollbar)' {
