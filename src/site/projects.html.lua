@@ -10,7 +10,7 @@ return Page {
 
 			p {
 				-- TODO: update the lines of code figure before release
-				strong 'lwk (Lua Website Kit) is a static site generator in ~1300 LOC.',
+				strong 'lwk (Lua Website Kit) is a site templating engine/SSG in ~1300 LOC.',
 				[[
 					It's mostly a bespoke tool made for this website because I got tired of
 					hand-writing HTML and CSS but didn't want to use a complex JS framework.
@@ -68,6 +68,17 @@ return Page {
 				},
 			},
 			-- }}}
+		},
+
+		Section 'tspmo' {
+			TagList { 'TypeScript', 'ElysiaJS', 'discord.js' },
+
+			p {
+				strong 'tspmo (TypeScript-Powered Media Organizer) is a tagged media gallery.',
+				[[
+
+				]],
+			},
 		},
 
 		Section 'qalc.nvim' {

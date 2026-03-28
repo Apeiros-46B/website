@@ -37,7 +37,7 @@ build_subtree = function(tree, toplevel)
 	local class = toplevel and 'link-tree' or 'link-tree-inner'
 	local res = {}
 	build_children(tree, res)
-	return ul {
+	return ol {
 		class = class,
 		res,
 	}

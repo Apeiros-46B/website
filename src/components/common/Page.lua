@@ -34,7 +34,7 @@ GlobalStyles {
 	},
 
 	-- 3 cols if wide enough and sidebars exist
-	Query '@media' { min_width = rem(layout.page_width_thresh_rem) } {
+	Query '@media' { min_width = rem(layout.page_width_rem) } {
 		Rule 'main.has-sidebar' {
 			grid_template_columns = wide_grid_template,
 		},
@@ -71,7 +71,7 @@ GlobalStyles {
 	Rule '#right-sidebar' { grid_column = 3 },
 
 	-- sidebars shown if wide enough
-	Query '@media' { min_width = rem(layout.page_width_thresh_rem) } {
+	Query '@media' { min_width = rem(layout.page_width_rem) } {
 		Rule '.sidebar' {
 			display = block,
 		}

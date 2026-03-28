@@ -52,8 +52,9 @@ return Page {
 			id = 'title',
 			'apeiros.xyz',
 		},
-		div {
+		section {
 			id = 'socials-outer',
+			aria_label = "Social links and contact info",
 			HorizList {
 				id = 'socials',
 				For (socials) (function(entry)

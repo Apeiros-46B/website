@@ -21,7 +21,7 @@ GlobalStyles {
 		margin_top = rem(0.5),
 		margin_bottom = 0,
 	},
-	Rule '.article-meta' {
+	Rule '.article-timestamp' {
 		margin_bottom = rem(1),
 		font_size = pct(90),
 		color = var 'fg_dim',
@@ -36,7 +36,7 @@ GlobalStyles {
 		font_size = pct(110),
 	},
 	-- don't show inline toc if wide enough
-	Query '@media' { min_width = rem(layout.page_width_thresh_rem) } {
+	Query '@media' { min_width = rem(layout.page_width_rem) } {
 		Rule '.article-toc-inline' {
 			display = none,
 		}
@@ -107,6 +107,10 @@ local function generate_toc(content)
 end
 -- }}}
 
+local function format_date(date)
+	return (date:gsub('%-', '.'))
+end
+
 return Component.new('Article', function(_, _, args, _)
 	-- {{{ create table of contents
 	local toc_tree = generate_toc(args.content)
@@ -137,17 +141,6 @@ return Component.new('Article', function(_, _, args, _)
 	end
 	-- }}}
 
-	-- {{{ create tag links
-	local tags = {}
-
-	for i, v in ipairs(args.tags) do
-		tags[i] = {
-			href = '/blog/tags/' .. v:lower() .. '.html',
-			name = v,
-		}
-	end
-	-- }}}
-
 	return Provide {
 		nav_active = 'blog',
 
@@ -168,10 +161,13 @@ return Component.new('Article', function(_, _, args, _)
 						args.description,
 					},
 					p {
-						class = 'article-meta',
-						args.date,
+						class = 'article-timestamp',
+						time {
+							datetime = args.date,
+							format_date(args.date),
+						},
 					},
-					TagList(tags),
+					TagList(args.tags),
 				},
 
 				If (toc_inline) { toc_inline },
