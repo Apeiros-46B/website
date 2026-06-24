@@ -1,7 +1,7 @@
 -- takes a list of tag declarations
--- each tag should have
+-- each tag either be a string or a table with
 -- name: the name of the tag
--- href: the url to navigate to upon being clicked (nil for no link)
+-- href: the url to navigate to upon being clicked
 
 GlobalStyles {
 	Rule '.tag-list' {
@@ -10,10 +10,14 @@ GlobalStyles {
 		gap = rem(0.5),
 
 		Rule '& li' {
-			padding = { px(2), px(8) },
-			font_size = pct(80),
+			padding = { px(1), px(7) },
+			font_size = pct(70),
 			font_weight = bold,
 			background_color = var 'bg_raised',
+		},
+
+		Rule '& a' {
+			text_decoration = none,
 		},
 	},
 }

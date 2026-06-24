@@ -1,0 +1,1 @@
+return { blog = false }

@@ -2,11 +2,16 @@
 -- each tree node should have:
 -- href: passed to <a> as attr
 -- title: passed to <a> as content
--- children: table of children
+-- children: table of children (optional)
+-- active: whether it should be strong or a (optional)
 
 GlobalStyles {
 	Rule '.link-tree-item > a' {
 		text_decoration = none,
+	},
+
+	Rule '.link-tree-item > strong' {
+		color = var 'fg_accent',
 	},
 
 	Rule '.link-tree-inner' {
@@ -22,12 +27,11 @@ local function build_children(tree, res)
 		if node.children then
 			children = build_subtree(node.children)
 		end
+		local label = node.active and strong(node.title)
+			or a { href = node.href, node.title }
 		res[#res+1] = li {
 			class = 'link-tree-item',
-			a {
-				href = node.href,
-				node.title,
-			},
+			label,
 			children,
 		}
 	end

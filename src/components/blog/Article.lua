@@ -14,32 +14,50 @@ local skip_tags = {
 }
 
 GlobalStyles {
-	Rule '.article-header' {
-		padding_bottom = rem(0.2),
-	},
 	Rule '.article-description' {
 		margin_top = rem(0.5),
 		margin_bottom = 0,
 	},
 	Rule '.article-timestamp' {
-		margin_bottom = rem(1),
+		margin_top = rem(0.5),
+		margin_bottom = 0,
 		font_size = pct(90),
 		color = var 'fg_dim',
 	},
+	Rule '.article-header .article-tag-list' {
+		margin_top = rem(0.5),
+		margin_bottom = rem(0),
+	},
+	Rule '.article-toc-inline, .article-series-inline' {
+		margin_top = rem(1),
+	},
+	Rule '.article-nav' {
+		display = flex,
+		justify_content = space_between,
+		margin_top = rem(1),
+		margin_bottom = rem(1),
 
-	-- TODO: make the table of contents header look like a "tab"
-	-- that says "table of contents" above the thing. maybe it's
-	-- not worth the effort, idk we can do it later it doesn't
-	-- affect content or router refactoring at all
-	Rule '.article-toc-header' {
+		Rule '& .article-nav-next' {
+			margin_left = auto,
+		}
+	},
+
+	-- TODO: make the sidebar header look like "tabs" that show the title above the
+	-- card. maybe it's not worth the effort, idk we can do it later it doesn't affect
+	-- content at all so it's low priority
+	Rule '.article-toc-header, .article-series-header' {
 		margin_bottom = rem(0.5),
 		font_size = pct(110),
 	},
+
 	-- don't show inline toc if wide enough
 	Query '@media' { min_width = rem(layout.page_width_rem) } {
 		Rule '.article-toc-inline' {
 			display = none,
-		}
+		},
+		Rule '.article-series-inline' {
+			display = none,
+		},
 	},
 }
 
@@ -111,7 +129,7 @@ local function format_date(date)
 	return (date:gsub('%-', '.'))
 end
 
-return Component.new('Article', function(_, _, args, _)
+return Component.new('Article', function(_, _, args, ctx)
 	-- {{{ create table of contents
 	local toc_tree = generate_toc(args.content)
 
@@ -141,40 +159,106 @@ return Component.new('Article', function(_, _, args, _)
 	end
 	-- }}}
 
+	-- {{{ create series navigation
+	local series_sidebar = nil
+	local series_inline = nil
+
+	if ctx.page.meta.series then
+		local series_pages = ctx.manifest.groups.blog.series[ctx.page.meta.series]
+
+		if series_pages and #series_pages > 0 then
+			local series_tree = {}
+			for _, page in ipairs(series_pages) do
+				series_tree[#series_tree+1] = {
+					href = page.url,
+					title = page.meta.title,
+					active = ctx.page.url == page.url,
+				}
+			end
+			local series = LinkTree(series_tree)
+
+			local series_base = nav {
+				aria_label = 'Article series',
+				h2 {
+					class = 'article-series-header',
+					ctx.page.meta.series,
+				},
+			}
+
+			series_sidebar = series_base(series)
+			series_inline = series_base {
+				class = 'card article-series-inline',
+				details {
+					summary 'Click to expand',
+					series,
+				},
+			}
+		end
+	end
+	-- }}}
+
+	local prev = ctx.page.meta.prev
+	local next = ctx.page.meta.next
+	local article_nav = If (next or prev) (nav {
+		class = 'article-nav',
+		If (prev) (function()
+			return span {
+				class = 'article-nav-prev',
+				'← ',
+				a { href = prev.url, prev.meta.title },
+			}
+		end),
+		If (next) (function()
+			return span {
+				class = 'article-nav-next',
+				a { href = next.url, next.meta.title },
+				' →',
+			}
+		end),
+	})
+
 	return Provide {
-		nav_active = 'blog',
+		nav_active = '/blog',
 
 		Page {
-			title = args.title,
-			description = args.description,
+			title = ctx.page.meta.title,
+			description = ctx.page.meta.description,
 			head = args.head,
 			opengraph = args.opengraph,
 
 			left_sidebar = toc_sidebar,
+			right_sidebar = series_sidebar,
 
 			content = article {
-				header {
-					class = 'article-header',
-					h1 { args.title },
-					p {
-						class = 'article-description',
-						args.description,
-					},
-					p {
-						class = 'article-timestamp',
-						time {
-							datetime = args.date,
-							format_date(args.date),
+				div {
+					header {
+						class = 'article-header',
+						h1 { ctx.page.meta.title },
+						p {
+							class = 'article-description',
+							ctx.page.meta.description,
 						},
+						p {
+							class = 'article-timestamp',
+							time {
+								datetime = ctx.page.meta.date,
+								format_date(ctx.page.meta.date),
+							}
+						},
+						ArticleTagList(ctx.page.meta.tags),
 					},
-					TagList(args.tags),
+
+					If (toc_inline) { toc_inline },
+					If (series_inline) { series_inline },
+
+					article_nav,
 				},
 
-				If (toc_inline) { toc_inline },
-
+				hr,
+				args.content,
 				hr,
 
-				args.content,
+				article_nav,
 			},
 		},
 	}

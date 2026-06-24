@@ -1,0 +1,20 @@
+return {
+	title = "B1",
+	description = "Foo bar baz quux B1",
+	date = "2026-05-02",
+	series = "Series B",
+	tags = { "foo" },
+}, Article {
+	head = {},
+	content = {
+		Section 'ts' {
+			p 'Lorem ipsum',
+		},
+		Section 'pmo' {
+			p 'dolor sit amet',
+		},
+		Section 'icl' {
+			p 'consectetuer adipiscing elit',
+		},
+	},
+}

@@ -1,6 +1,6 @@
-return Page {
+return { ord = 2 }, Page {
 	title = 'apeiros.xyz - projects',
-	description = '',
+	description = 'Software projects',
 	head = {},
 	content = {
 		h1 'projects',
@@ -9,13 +9,13 @@ return Page {
 			TagList { 'Lua', 'HTML', 'CSS' },
 
 			p {
-				-- TODO: update the lines of code figure before release
-				strong 'lwk (Lua Website Kit) is a site templating engine/SSG in ~1300 LOC.',
+				strong 'lwk (Lua Website Kit) is a site templating engine/SSG in ~1300 SLOC.',
 				[[
 					It's mostly a bespoke tool made for this website because I got tired of
 					hand-writing HTML and CSS but didn't want to use a complex JS framework.
 					It turns Lua files containing a special table-based DSL into raw HTML+CSS
-					and supports custom components and file handlers.
+					and supports custom components/templating and file handlers (extensible
+					enough to do something like bring your own markdown processor).
 				]],
 			},
 
@@ -76,7 +76,7 @@ return Page {
 			p {
 				strong 'tspmo (TypeScript-Powered Media Organizer) is a tagged media gallery.',
 				[[
-
+					
 				]],
 			},
 		},

@@ -123,6 +123,7 @@ return Component.new('Page', function(_, _, args, _)
 				href = '/assets/favicon.svg',
 			},
 			LinkGlobalStyles,
+
 			args.head,
 		},
 		body {
@@ -148,7 +149,7 @@ return Component.new('Page', function(_, _, args, _)
 							li { '© Apeiros ' .. os.date('%Y') },
 							If (not args.about_shown) {
 								li {
-									a { href = '/about.html', 'about' },
+									a { href = '/about', 'about' },
 								},
 							}
 						},

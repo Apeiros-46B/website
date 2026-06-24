@@ -1,9 +1,10 @@
-return Article {
+return {
 	title = "Test",
 	description = 'Test page',
 	date = '2026-03-24',
 	updated_date = '2026-03-25',
 	tags = { 'lua', 'ssg' },
+}, Article {
 	head = {},
 	content = {
 		Section 'A1' {

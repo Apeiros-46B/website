@@ -1,5 +1,5 @@
 GlobalStyles {
-	Rule 'hide-scrollbar' {
+	Rule '.hide-scrollbar' {
 		scrollbar_width = none,
 		_ms_overflow_style = none,
 
