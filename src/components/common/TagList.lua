@@ -18,6 +18,10 @@ GlobalStyles {
 
 		Rule '& a' {
 			text_decoration = none,
+
+			Rule '&:hover' {
+				text_decoration = underline,
+			}
 		},
 	},
 }

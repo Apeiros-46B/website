@@ -36,10 +36,6 @@ GlobalStyles {
 		line_height = 1.2,
 		font_size = rem(1.2),
 	},
-	Rule '.post-title a' {
-		text_decoration = none,
-		color = var 'fg_main',
-	},
 	Rule '.post-title a:hover' {
 		text_decoration = underline,
 	},
@@ -57,12 +53,12 @@ GlobalStyles {
 		border_bottom = { px(2), 'solid', var 'fg_sep' },
 	},
 
-	Rule '.post-content .article-tag-list' {
+	Rule '.post-content .tag-list' {
 		margin_left = auto,
 	},
 
 	Query '@media' { max_width = rem(45) } {
-		Rule '.post-content .article-tag-list' {
+		Rule '.post-content .tag-list' {
 			flex_basis = pct(100),
 			margin_left = 0,
 		},
@@ -75,6 +71,9 @@ GlobalStyles {
 return function(pages)
 	return ol {
 		class = 'blog-posts',
+		If (#pages == 0) {
+			p 'No articles yet.',
+		},
 		For (pages) (function(page)
 			return article {
 				class = 'post-content',
@@ -84,15 +83,9 @@ return function(pages)
 						class = 'post-title',
 						a { href = page.url, page.meta.title },
 					},
-					time {
-						class = 'post-date',
-						datetime = page.meta.date,
-						page.meta.date,
-					},
+					Date(page.meta.date) { class = 'post-date' },
 				},
-				If (page.meta.tags) (div {
-					class = 'post-sep',
-				}),
+				If (page.meta.tags) (div { class = 'post-sep' }),
 				If (page.meta.tags) (ArticleTagList(page.meta.tags)),
 				p(page.meta.description),
 			}

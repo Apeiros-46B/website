@@ -10,10 +10,6 @@ GlobalStyles {
 		text_decoration = none,
 	},
 
-	Rule '.link-tree-item > strong' {
-		color = var 'fg_accent',
-	},
-
 	Rule '.link-tree-inner' {
 		margin_left = rem(1),
 	},
@@ -27,11 +23,11 @@ local function build_children(tree, res)
 		if node.children then
 			children = build_subtree(node.children)
 		end
-		local label = node.active and strong(node.title)
-			or a { href = node.href, node.title }
 		res[#res+1] = li {
 			class = 'link-tree-item',
-			label,
+			node.active
+				and strong(node.title)
+				or a { href = node.href, node.title },
 			children,
 		}
 	end

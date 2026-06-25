@@ -14,19 +14,9 @@ local skip_tags = {
 }
 
 GlobalStyles {
-	Rule '.article-description' {
+	Rule '.article-header > :not(:first-child)' {
 		margin_top = rem(0.5),
 		margin_bottom = 0,
-	},
-	Rule '.article-timestamp' {
-		margin_top = rem(0.5),
-		margin_bottom = 0,
-		font_size = pct(90),
-		color = var 'fg_dim',
-	},
-	Rule '.article-header .article-tag-list' {
-		margin_top = rem(0.5),
-		margin_bottom = rem(0),
 	},
 	Rule '.article-toc-inline, .article-series-inline' {
 		margin_top = rem(1),
@@ -124,10 +114,6 @@ local function generate_toc(content)
 	return toc
 end
 -- }}}
-
-local function format_date(date)
-	return (date:gsub('%-', '.'))
-end
 
 return Component.new('Article', function(_, _, args, ctx)
 	-- {{{ create table of contents
@@ -240,10 +226,7 @@ return Component.new('Article', function(_, _, args, ctx)
 						},
 						p {
 							class = 'article-timestamp',
-							time {
-								datetime = ctx.page.meta.date,
-								format_date(ctx.page.meta.date),
-							}
+							Date(ctx.page.meta.date),
 						},
 						ArticleTagList(ctx.page.meta.tags),
 					},

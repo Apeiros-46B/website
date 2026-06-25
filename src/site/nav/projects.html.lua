@@ -1,107 +1,125 @@
+local projects = {
+	{
+		name = 'avalon',
+		tags = { 'Zig', 'RISC-V' },
+		url = 'https://github.com/Apeiros-46B/lwk',
+		start_date = '2026-04',
+		end_date = 'present',
+		link_desc = 'is a work-in-progress experimental OS.',
+		long_desc = [[
+			It's still very incomplete and nowhere near any semblance of usability
+			(just a tiny kernel with a buddy allocator and a round-robin scheduler),
+			but my eventual goals are to explore some non-Unix-like OS designs
+			(microkernel, single address space leveraging CHERI, capability-based
+			security, etc.) and experiment with human-computer interaction and UI
+			design in the future.
+		]],
+	},
+	{
+		name = 'qalc.nvim',
+		tags = {
+			'Lua',
+			'C++',
+			'Neovim',
+			{ href = 'https://github.com/Qalculate/libqalculate', name = 'libqalculate' },
+		},
+		url = 'https://github.com/Apeiros-46B/qalc.nvim/tree/rewrite',
+		start_date = '2022-12',
+		end_date = 'present',
+		note = 'undergoing a rewrite',
+		link_desc = 'is a reactive text-based calculator inside of Neovim.',
+		long_desc = [[
+			You can write expressions that depend on others, edit their values, and
+			watch the results update in real time. With libqalculate as a backend,
+			advanced features like unit conversion, algebra, and calculus are available,
+			integrated with diagnostics, syntax highlighting, and autocompletion support.
+		]],
+	},
+	{
+		name = 'lwk',
+		tags = { 'Lua', 'HTML', 'CSS' },
+		url = 'https://github.com/Apeiros-46B/lwk',
+		start_date = '2026-03',
+		end_date = '2026-06',
+		link_desc = '(Lua Website Kit) is a web templating engine/SSG in ~1300 SLOC.',
+		long_desc = [[
+			It's mostly a bespoke tool made for this website because I got tired of
+			hand-writing HTML and CSS but didn't want to use a complex JS framework.
+			It turns Lua files containing a special table-based DSL into raw HTML+CSS
+			and supports custom components/templating and file handlers (extensible
+			enough to do something like bring your own markdown processor).
+		]],
+	},
+	{
+		name = 'tspmo',
+		tags = { 'TypeScript', 'ElysiaJS', 'discord.js' },
+		url = 'https://github.com/Apeiros-46B/tspmo',
+		start_date = '2026-02',
+		end_date = '2026-03',
+		link_desc = '(TypeScript-Powered Media Organizer) is a basic tagged media gallery.',
+		long_desc = [[
+			It was built for organizing memes and reaction images for me and a few friends,
+			and primarily designed for interaction via Discord, supporting in-app uploads and
+			search through both tags and full-text search (title and description). It also
+			supports importing posts from sources like Discord attachments and Tenor GIFs.
+		]],
+	},
+	{
+		name = 'sidechain',
+		tags = { 'Rust' },
+		url = 'https://github.com/Apeiros-46B/sidechain',
+		start_date = '2026-01',
+		end_date = '2026-01',
+		link_desc = 'is a program that uses ffmpeg to transcode audio files in bulk.',
+		long_desc = [[
+			I wanted something to make a synced mirror of my music library in Opus for my phone,
+			and the existing solutions I looked had limitations like re-transcoding already
+			lossy files, so I made this, which uses SQLite to track files and ffmpeg to transcode
+			them, skipping previously transcoded files and passing through lossy files, album
+			covers, etc.
+		]],
+	},
+	{
+		name = 'raytracer',
+		tags = {
+			'Rust',
+			'GLSL',
+			'WebGL',
+			{ href = 'https://github.com/emilk/egui', name = 'egui' },
+		},
+		url = 'https://github.com/Apeiros-46B/raytracer',
+		start_date = '2024-05',
+		end_date = '2024-06',
+		link_desc = 'is a naive path-tracer in the browser that renders simple objects',
+		long_desc = [[
+			(ellipsoids and boxes). It uses a stochastic method to approximate realistic
+			lighting, implemented as a fragment shader in OpenGL for GPU acceleration.
+			It's written in Rust using egui for UI interaction and can run as a native
+			application too.
+		]],
+	},
+}
+
+-- TODO: handle start_date, end_date, note
+local function Project(args)
+	return Section(args.name) {
+		TagList(args.tags),
+		p {
+			strong {
+				a { href = args.url, args.name },
+				' ' .. args.link_desc,
+			},
+			args.long_desc,
+		},
+	}
+end
+
 return { ord = 2 }, Page {
 	title = 'apeiros.xyz - projects',
 	description = 'Software projects',
 	head = {},
 	content = {
 		h1 'projects',
-
-		Section 'lwk' {
-			TagList { 'Lua', 'HTML', 'CSS' },
-
-			p {
-				strong 'lwk (Lua Website Kit) is a site templating engine/SSG in ~1300 SLOC.',
-				[[
-					It's mostly a bespoke tool made for this website because I got tired of
-					hand-writing HTML and CSS but didn't want to use a complex JS framework.
-					It turns Lua files containing a special table-based DSL into raw HTML+CSS
-					and supports custom components/templating and file handlers (extensible
-					enough to do something like bring your own markdown processor).
-				]],
-			},
-
-			-- {{{ details
-			details {
-				summary 'See code samples',
-
-				p {
-					'lwk internally represents all elements and components as tables with ',
-					code '__call', ' ',
-					[[
-						metamethods, allowing the declaration of document trees using Lua's syntax sugar for function calls that only have a single string or table argument. Crucially, the implementation of this metamethod returns the modified element, allowing "instantiated" components to be repeatedly called with new arguments in order to add children or merge/override attributes.
-					]]
-				},
-
-				p {
-					[[
-						The following example defines a side note component, which specifies styles to append to the global CSS bundle and returns an
-					]], ' ',
-					code 'aside', ' ',
-					[[
-						element with the necessary attributes applied.
-					]]
-				},
-
-				SideNote(p {
-					[[
-						This is what that component looks like. Note that I didn't make any typos in the code; lwk provides a Lua environment which automagically resolves HTML tags, components, and CSS keywords without needing you to write a single
-					]], ' ',
-					code 'require',
-					'! For complex CSS properties, you can always fall back to raw strings.'
-				}),
-
-				CodeBlock {
-					label = 'SideNote.lua',
-					data = require('src.data.code_hl.projects.SideNote'),
-					highlight = { { 13, 16 } },
-				},
-
-				p {
-					[[
-						Although the returned element has no direct children, when we use the component, we can call/instantiate it again to add new attributes and children:
-					]],
-				},
-
-				CodeBlock {
-					label = 'my_awesome_page.lua',
-					data = require('src.data.code_hl.projects.SideNote_usage'),
-					range = { 3, 11 },
-				},
-			},
-			-- }}}
-		},
-
-		Section 'tspmo' {
-			TagList { 'TypeScript', 'ElysiaJS', 'discord.js' },
-
-			p {
-				strong 'tspmo (TypeScript-Powered Media Organizer) is a tagged media gallery.',
-				[[
-					
-				]],
-			},
-		},
-
-		Section 'qalc.nvim' {
-			TagList {
-				'Lua',
-				'C++',
-				'Neovim',
-				{
-					href = 'https://github.com/Qalculate/libqalculate',
-					name = 'libqalculate',
-				},
-			},
-
-			p {
-				strong 'qalc.nvim is a reactive text-based calculator inside of Neovim.',
-				[[
-					You can write expressions that depend on others, edit their values, and
-					watch the results update in real time. With libqalculate as a backend,
-					advanced functions like unit conversion and calculus are available,
-					integrated with diagnostics, syntax highlighting, and autocompletion
-					features.
-				]],
-			},
-		},
+		For (projects) (Project),
 	},
 }

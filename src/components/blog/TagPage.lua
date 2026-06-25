@@ -29,9 +29,6 @@ return function(ctx)
 					href = '/blog',
 					'Back to all articles',
 				}),
-				If (#posts == 0) {
-					p 'No articles found with this tag.',
-				},
 				ArticleList(posts),
 			},
 		},
