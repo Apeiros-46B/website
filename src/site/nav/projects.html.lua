@@ -100,9 +100,30 @@ local projects = {
 	},
 }
 
--- TODO: handle start_date, end_date, note
+GlobalStyles {
+	Rule '.project-entry > :not(:last-child)' {
+		margin_bottom = rem(0.5),
+	},
+	Rule '.project-entry > p.project-notes' {
+		font_size = rem(0.9),
+		color = var 'fg_dim',
+
+		Rule '&> :is(time, span)' {
+			font_size = pct(100),
+		},
+	},
+}
+
 local function Project(args)
-	return Section(args.name) {
+	return Section(args.name, h2) {
+		class = 'project-entry',
+		p {
+			class = 'project-notes',
+			Date(args.start_date, args.end_date),
+			If (args.note) (function()
+				return ' (' .. args.note .. ')'
+			end),
+		},
 		TagList(args.tags),
 		p {
 			strong {
