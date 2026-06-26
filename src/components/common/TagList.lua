@@ -11,7 +11,7 @@ GlobalStyles {
 
 		Rule '& li' {
 			padding = { px(1), px(7) },
-			font_size = pct(70),
+			font_size = pct(80),
 			font_weight = bold,
 			background_color = var 'bg_raised',
 

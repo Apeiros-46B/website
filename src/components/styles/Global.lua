@@ -142,7 +142,7 @@ GlobalStyles(2, {
 		margin_left = rem(1),
 		margin_right = rem(1),
 		font_family = Quoted 'IBM Plex Sans',
-		font_size = pct(120),
+		font_size = pct(110),
 		color = var 'fg_main',
 		background_color = var 'bg_base',
 	},
