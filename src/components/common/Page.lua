@@ -65,7 +65,6 @@ GlobalStyles {
 		grid_row = 2,
 		overflow_y = auto,
 		margin_top = rem(-1),
-		HideScrollbar,
 	},
 	Rule '#left-sidebar' { grid_column = 1 },
 	Rule '#right-sidebar' { grid_column = 3 },
@@ -93,11 +92,46 @@ GlobalStyles {
 	},
 }
 
-return Component.new('Page', function(_, _, args, _)
+local function flatten_opengraph_keys(src, dst, ns)
+	if not src then return end
+	ns = ns or 'og:'
+
+	for _, entry in ipairs(src) do
+		if type(entry[2]) == 'table' then
+			flatten_opengraph_keys(entry[2], dst, ns .. entry[1] .. ':')
+		else
+			dst[#dst+1] = { property = ns .. entry[1], content = entry[2] }
+		end
+	end
+end
+
+return Component.new('Page', function(_, _, args, ctx)
 	local layout_class = nil
 	if args.left_sidebar or args.right_sidebar then
 		layout_class = 'has-sidebar'
 	end
+
+	local title_str = args.title
+	if not title_str then
+		title_str = 'apeiros.xyz'
+	elseif not title_str:match('apeiros%.xyz') then
+		title_str = title_str .. ' - apeiros.xyz'
+	end
+
+	local og = {
+		{ 'site_name', 'apeiros.xyz' },
+		{ 'url', 'https://apeiros.xyz' .. ctx.page.url },
+		{ 'title', args.title },
+		{ 'description', args.description },
+	}
+	if args.opengraph then
+		for _, entry in ipairs(args.opengraph) do
+			og[#og+1] = entry
+		end
+	end
+
+	local og_props = {}
+	flatten_opengraph_keys(og, og_props)
 
 	return Document {
 		lang = 'en',
@@ -107,19 +141,16 @@ return Component.new('Page', function(_, _, args, _)
 				name = 'viewport',
 				content = 'width=device-width, initial-scale=1',
 			},
-			meta { name = 'description', content = args.description },
-			title { args.title },
+			title(title_str),
 
-			meta { name = 'og:title', content = args.title },
-			If (type(args.opengraph) == 'table') {
-				For (args.opengraph) (function(v, k)
-					return meta { name = 'og:' .. k, content = v }
-				end)
-			},
+			meta { name = 'author', content = 'Apeiros' },
+			meta { name = 'generator', content = 'lwk' },
+			meta { name = 'description', content = args.description },
+			For (og_props) (meta),
 
 			link {
 				rel = 'icon',
-				type = 'image/x-icon',
+				type = 'image/svg+xml',
 				href = '/assets/favicon.svg',
 			},
 			LinkGlobalStyles,

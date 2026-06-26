@@ -5,16 +5,13 @@ return {
 	series = "Series A",
 	tags = { "quux" },
 }, Article {
-	head = {},
-	content = {
-		Section 'ts' {
-			p 'Lorem ipsum',
-		},
-		Section 'pmo' {
-			p 'dolor sit amet',
-		},
-		Section 'icl' {
-			p 'consectetuer adipiscing elit',
-		},
+	Section 'ts' {
+		p 'Lorem ipsum',
+	},
+	Section 'pmo' {
+		p 'dolor sit amet',
+	},
+	Section 'icl' {
+		p 'consectetuer adipiscing elit',
 	},
 }

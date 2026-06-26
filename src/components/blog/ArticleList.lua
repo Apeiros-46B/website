@@ -85,8 +85,8 @@ return function(pages)
 					},
 					Date(page.meta.date) { class = 'post-date' },
 				},
-				If (page.meta.tags) (div { class = 'post-sep' }),
-				If (page.meta.tags) (ArticleTagList(page.meta.tags)),
+				div { class = 'post-sep' },
+				ArticleTagList(page.meta.tags),
 				p(page.meta.description),
 			}
 		end),

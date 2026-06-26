@@ -18,9 +18,6 @@ GlobalStyles {
 		margin_top = rem(0.5),
 		margin_bottom = 0,
 	},
-	Rule '.article-toc-inline, .article-series-inline' {
-		margin_top = rem(1),
-	},
 	Rule '.article-nav' {
 		display = flex,
 		justify_content = space_between,
@@ -117,7 +114,7 @@ end
 
 return Component.new('Article', function(_, _, args, ctx)
 	-- {{{ create table of contents
-	local toc_tree = generate_toc(args.content)
+	local toc_tree = generate_toc(args)
 
 	local toc = nil
 	local toc_sidebar = nil
@@ -183,25 +180,43 @@ return Component.new('Article', function(_, _, args, ctx)
 	end
 	-- }}}
 
+	-- {{{ create next/prev navigation
 	local prev = ctx.page.meta.prev
 	local next = ctx.page.meta.next
 	local article_nav = If (next or prev) (nav {
 		class = 'article-nav',
+		aria_label = 'Previous/next article by publish date',
+
 		If (prev) (function()
 			return span {
 				class = 'article-nav-prev',
-				'← ',
+				aria_label = 'Previous article (older)',
+				span { aria_hidden = true, '← ' },
 				a { href = prev.url, prev.meta.title },
 			}
 		end),
+
 		If (next) (function()
 			return span {
 				class = 'article-nav-next',
+				aria_label = 'Next article (newer)',
 				a { href = next.url, next.meta.title },
-				' →',
+				span { aria_hidden = true, ' →' },
 			}
 		end),
 	})
+	-- }}}
+
+	-- create opengraph tags
+	local og_article = {
+		{ 'published_time', ctx.page.meta.date },
+		{ 'modified_time', ctx.page.meta.updated_date or ctx.page.meta.date },
+	}
+	if ctx.page.meta.tags then
+		for _, tag in ipairs(ctx.page.meta.tags) do
+			og_article[#og_article+1] = { 'tag', tag }
+		end
+	end
 
 	return Provide {
 		nav_active = '/blog',
@@ -209,36 +224,36 @@ return Component.new('Article', function(_, _, args, ctx)
 		Page {
 			title = ctx.page.meta.title,
 			description = ctx.page.meta.description,
-			head = args.head,
-			opengraph = args.opengraph,
+			opengraph = {
+				{ 'type', 'article' },
+				{ 'article', og_article },
+			},
 
 			left_sidebar = toc_sidebar,
 			right_sidebar = series_sidebar,
 
 			content = article {
-				div {
-					header {
-						class = 'article-header',
-						h1 { ctx.page.meta.title },
-						p {
-							class = 'article-description',
-							ctx.page.meta.description,
-						},
-						p {
-							class = 'article-timestamp',
-							Date(ctx.page.meta.date),
-						},
-						ArticleTagList(ctx.page.meta.tags),
+				header {
+					class = 'article-header',
+					h1 { ctx.page.meta.title },
+					p {
+						class = 'article-description',
+						ctx.page.meta.description,
 					},
-
-					If (toc_inline) { toc_inline },
-					If (series_inline) { series_inline },
-
-					article_nav,
+					p {
+						class = 'article-timestamp',
+						Date(ctx.page.meta.date),
+					},
+					ArticleTagList(ctx.page.meta.tags),
 				},
 
+				If (toc_inline) { toc_inline },
+				If (series_inline) { series_inline },
+
+				article_nav,
+
 				hr,
-				args.content,
+				args,
 				hr,
 
 				article_nav,

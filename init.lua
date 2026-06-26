@@ -1,4 +1,30 @@
 require('ssg.path')('ssg')
+local util = require('util')
+
+-- remove nil holes from a numeric table
+-- if max_index is not provided, it's found using iteration via pairs
+local function compact_table(t, max_index)
+	if not max_index then
+		max_index = 0
+		for k, _ in pairs(t) do
+			if type(k) == 'number' and k > max_index then
+				max_index = k
+			end
+		end
+	end
+
+	local write = 1
+	for read = 1, max_index do
+		if t[read] ~= nil then
+			if read ~= write then
+				t[write] = t[read]
+				t[read] = nil
+			end
+			write = write + 1
+		end
+	end
+	return t
+end
 
 -- collect pages into sorted groups
 local function group_pages(manifest)
@@ -6,24 +32,33 @@ local function group_pages(manifest)
 	local blog_chrono = {}
 	local blog_series = {}
 
-	for _, page in pairs(manifest.pages) do
-		if page.meta.nav then
-			-- rewrite path to toplevel instead of nav subdir
-			page.dst_rel_path = page.dst_rel_path:gsub('^nav/', '')
-			nav[#nav+1] = page
-		elseif page.meta.blog then
-			blog_chrono[#blog_chrono+1] = page
+	local old_num_pages = #manifest.pages
 
-			if page.meta.series then
-				local series = blog_series[page.meta.series] or {}
-				series[#series+1] = page
-				blog_series[page.meta.series] = series
+	for k, page in pairs(manifest.pages) do
+		if page.meta.skip then
+			-- skip this page, stop it from rendering
+			manifest.pages[k] = nil
+		else
+			if page.meta.nav then
+				-- rewrite path to toplevel instead of nav subdir
+				page.dst_rel_path = page.dst_rel_path:gsub('^nav/', '')
+				nav[#nav+1] = page
+			elseif page.meta.blog then
+				blog_chrono[#blog_chrono+1] = page
+
+				if page.meta.series then
+					local series = blog_series[page.meta.series] or {}
+					series[#series+1] = page
+					blog_series[page.meta.series] = series
+				end
 			end
-		end
 
-		page.url = '/' .. page.dst_rel_path:gsub('%.html$', '')
-		page.slug = page.url:match('^.*/([^/]-)$')
+			page.url = '/' .. page.dst_rel_path:gsub('%.html$', '')
+			page.slug = page.url:match('^.*/([^/]-)$')
+		end
 	end
+
+	compact_table(manifest.pages, old_num_pages)
 
 	-- manual ordering for navbar entries
 	table.sort(nav, function(a, b) return a.meta.ord < b.meta.ord end)
@@ -43,39 +78,56 @@ local function group_pages(manifest)
 	}
 end
 
--- build a set of tags that have dedicated tag pages, plus tag counts
+-- build tag slug/name mapping and tag counts
 local function blog_collect_tags(manifest)
-	local tag_pages = {}
+	-- derive url-safe slug from human-readable tag name
+	local function tag_to_slug(name)
+		return name:lower():gsub('%s+', '-'):gsub('[^%w-]', '')
+	end
 
+	-- discover tag pages
+	local tag_pages = {} -- slug -> page entry
 	for _, page in ipairs(manifest.pages) do
-		local tag = page.rel_path:match('^blog/tags/(.+)%.html%.lua$')
-		if tag then
-			tag_pages[tag] = true
+		local slug = page.rel_path:match('^blog/tags/(.+)%.html%.lua$')
+		if slug then
+			tag_pages[slug] = page
 		end
 	end
 
-	-- count tags across all blog posts
 	local counts = {}
+	local tag_slugs = {} -- human-readable name -> slug
+	local tag_names = {} -- slug -> human-readable name
 	for _, page in ipairs(manifest.groups.blog.chrono) do
 		if page.meta.tags then
 			for _, tag in ipairs(page.meta.tags) do
-				counts[tag] = (counts[tag] or 0) + 1
+				local slug = tag_to_slug(tag)
+				if tag_pages[slug] then
+					tag_slugs[tag] = slug
+					if not tag_names[slug] then
+						tag_names[slug] = tag
+					end
+					counts[slug] = (counts[slug] or 0) + 1
+				else
+					util.log('tag "' .. tag .. '" missing page!', 'warn', 'blog')
+				end
 			end
 		end
 	end
 
 	-- sort by count descending, alphabetical for ties
 	local sorted = {}
-	for tag, count in pairs(counts) do
-		sorted[#sorted+1] = { tag = tag, count = count }
+	for slug, count in pairs(counts) do
+		sorted[#sorted+1] = { slug = slug, count = count }
 	end
 	table.sort(sorted, function(a, b)
 		if a.count ~= b.count then return a.count > b.count end
-		return a.tag < b.tag
+		return a.slug < b.slug
 	end)
 
 	manifest.groups.blog.tags = sorted
 	manifest.groups.blog.tag_pages = tag_pages
+	manifest.groups.blog.tag_names = tag_names
+	manifest.groups.blog.tag_slugs = tag_slugs
 end
 
 -- add next/prev metadata fields to pages in the blog group

@@ -1,14 +1,18 @@
 -- displays all blog articles tagged with the tag extracted from the page path
 
 return function(ctx)
-	local tag = ctx.page.rel_path:match('^blog/tags/(.+)%.html%.lua$')
-	if not tag then return nil end
+	local slug = ctx.page.rel_path:match('^blog/tags/(.+)%.html%.lua$')
+	if not slug then return nil end
+
+	local tag_names = ctx.manifest.groups.blog.tag_names or {}
+	local tag_slugs = ctx.manifest.groups.blog.tag_slugs or {}
+	local display_name = tag_names[slug] or slug
 
 	local posts = {}
 	for _, page in ipairs(ctx.manifest.groups.blog.chrono) do
 		if page.meta.tags then
-			for _, t in ipairs(page.meta.tags) do
-				if t == tag then
+			for _, tag in ipairs(page.meta.tags) do
+				if tag_slugs[tag] == slug then
 					posts[#posts+1] = page
 					break
 				end
@@ -16,18 +20,20 @@ return function(ctx)
 		end
 	end
 
+	local title = 'articles about ' .. display_name
+
 	return Provide {
 		nav_active = '/blog',
 
 		Page {
-			title = 'apeiros.xyz - tag "' .. tag .. '"',
-			description = 'Articles tagged "' .. tag .. '"',
+			title = title,
+			description = '',
 			head = {},
 			content = {
-				h1('blog - articles tagged "' .. tag .. '"'),
-				p(a {
+				h1(title),
+				nav(a {
 					href = '/blog',
-					'Back to all articles',
+					'(Back to all articles)',
 				}),
 				ArticleList(posts),
 			},

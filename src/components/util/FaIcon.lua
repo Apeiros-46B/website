@@ -10,7 +10,7 @@ local icons = {
 GlobalStyles {
 	Rule 'div.fa-wrapper' {
 		display = inline_block,
-		margin_right = rem(0.2),
+		margin_right = rem(0.3),
 
 		Rule '&> svg' {
 			margin_top = px(2),

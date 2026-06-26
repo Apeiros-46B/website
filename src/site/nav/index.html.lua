@@ -1,4 +1,5 @@
 local socials = {
+	-- platform corresponds to FaIcon ids
 	{
 		platform = 'GitHub',
 		username = 'Apeiros-46B',
@@ -17,22 +18,23 @@ local socials = {
 }
 
 GlobalStyles {
-	Rule '#logo' {
-		width = rem(1.6),
-		height = rem(1.6),
-		flex_shrink = 0,
-		color = var 'fg_accent',
-	},
-
 	Rule '#title' {
 		display = flex,
 		align_items = center,
 		flex_direction = row,
 		gap = rem(0.5),
+
+		-- logo
+		Rule '&> svg' {
+			width = rem(1.6),
+			height = rem(1.6),
+			flex_shrink = 0,
+			color = var 'fg_accent',
+		},
 	},
 
-	Rule '#socials > li > svg' {
-		margin_right = rem(0.5),
+	Rule '#more-posts' {
+		color = var 'fg_dim',
 	},
 
 	Query '@media' { min_width = px(550) } {
@@ -60,19 +62,14 @@ GlobalStyles {
 }
 
 return { ord = 1 }, Page {
-	title = 'apeiros.xyz',
 	description = "Apeiros's homepage",
 	head = {},
 	content = {
-		h1 {
-			id = 'title',
-			-- logo
-			Raw [[<svg id="logo" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><path d="M400 100L443.301 75H356.699L400 100ZM53.5898 700L10.2886 675L53.5898 750V700ZM573.205 400V450H659.808L616.506 375L573.205 400ZM356.699 125L529.904 425L616.506 375L443.301 75L356.699 125ZM400 650H53.5898V750H400V650ZM573.205 350H226.795V450H573.205V350ZM201.795 443.301L721.4 743.301L771.4 656.699L251.795 356.699L201.795 443.301ZM96.8911 725L270.096 425L183.494 375L10.2886 675L96.8911 725ZM270.096 425L443.301 125L356.699 75L183.494 375L270.096 425Z" fill="currentColor"/></svg>]],
-			'apeiros.xyz',
-		},
+		h1 { id = 'title', Logo, 'apeiros.xyz' },
+
 		section {
 			id = 'socials-outer',
-			aria_label = "Social links and contact info",
+			aria_label = 'Social media links and contact information',
 			HorizList {
 				id = 'socials',
 				For (socials) (function(entry)
@@ -84,15 +81,17 @@ return { ord = 1 }, Page {
 							entry.username,
 						},
 					}
-				end)
+				end),
 			},
 		},
+
+		-- {{{ self-intro
 		p {
 			strong 'Hello, I am Apeiros!',
 			[[
-				I'm a Computer Science student at UBC. I'm passionate about programming,
-				nature photography, and 3D art, and I dabble in a bit of drawing, electronic
-				music production, and VFX.
+				I'm a Computer Science student at UBC Vancouver. I'm passionate about
+				programming, nature photography, and 3D art, and I dabble in a bit of drawing,
+				electronic music production, and VFX.
 			]],
 		},
 		p {
@@ -103,7 +102,7 @@ return { ord = 1 }, Page {
 			' ',
 			a {
 				href = '/projects',
-				'projects'
+				'projects',
 			},
 			' with varying degrees of usefulness.',
 			[[
@@ -113,5 +112,50 @@ return { ord = 1 }, Page {
 				and I am also familiar with C++, Java, Python, TypeScript, and various others.
 			]],
 		},
+		-- }}}
+
+		-- {{{ 3 recent blog posts
+		function(ctx)
+			local num_pages = #ctx.manifest.groups.blog.chrono
+			local count = math.min(3, num_pages)
+			if count == 0 then return nil end
+
+			local pages = {}
+			for i = 1, count do
+				pages[i] = ctx.manifest.groups.blog.chrono[i]
+			end
+
+			local more
+			if count < num_pages then
+				local remaining = num_pages - count
+				local plural = remaining == 1 and '' or 's'
+
+				more = p {
+					id = 'more-posts',
+					'...(', remaining, ' more article', plural, ' ',
+					a {
+						href = '/blog',
+						'on the main page',
+					},
+					')',
+				}
+			end
+
+			return Section 'recent blog posts' {
+				p {
+					[[
+						I occasionally write about random topics that interest me (mostly
+						programming-related, but sometimes other topics too). Here are a few of
+						the most recent articles I've written. You can find more
+					]],
+					' ',
+					a { href = '/blog', 'on this page' },
+					'.'
+				},
+				ArticleList(pages),
+				more,
+			}
+		end,
+		-- }}}
 	},
 }

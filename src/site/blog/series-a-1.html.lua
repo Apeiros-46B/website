@@ -3,18 +3,15 @@ return {
 	description = "Foo bar baz quux A1",
 	date = "2026-05-01",
 	series = "Series A",
-	tags = { "foo" },
+	tags = { "foo", 'OS dev', 'RISC-V' },
 }, Article {
-	head = {},
-	content = {
-		Section 'ts' {
-			p 'Lorem ipsum',
-		},
-		Section 'pmo' {
-			p 'dolor sit amet',
-		},
-		Section 'icl' {
-			p 'consectetuer adipiscing elit',
-		},
+	Section 'ts' {
+		p 'Lorem ipsum',
+	},
+	Section 'pmo' {
+		p 'dolor sit amet',
+	},
+	Section 'icl' {
+		p 'consectetuer adipiscing elit',
 	},
 }

@@ -1,32 +1,26 @@
 local projects = {
 	{
 		name = 'avalon',
-		tags = { 'Zig', 'RISC-V' },
 		url = 'https://github.com/Apeiros-46B/lwk',
 		start_date = '2026-04',
 		end_date = 'present',
+		stack = { 'Zig', 'RISC-V' },
 		link_desc = 'is a work-in-progress experimental OS.',
 		long_desc = [[
-			It's still very incomplete and nowhere near any semblance of usability
-			(just a tiny kernel with a buddy allocator and a round-robin scheduler),
-			but my eventual goals are to explore some non-Unix-like OS designs
-			(microkernel, single address space leveraging CHERI, capability-based
-			security, etc.) and experiment with human-computer interaction and UI
-			design in the future.
+			It's still very incomplete and nowhere near any semblance of usability (just a
+			tiny and insecure kernel with a buddy allocator and a round-robin scheduler),
+			but my eventual goals are to explore some non-Unix-like OS designs (microkernel,
+			single address space leveraging CHERI, capability-based security, etc.) and
+			experiment with human-computer interaction and UI design in the future.
 		]],
 	},
 	{
 		name = 'qalc.nvim',
-		tags = {
-			'Lua',
-			'C++',
-			'Neovim',
-			{ href = 'https://github.com/Qalculate/libqalculate', name = 'libqalculate' },
-		},
 		url = 'https://github.com/Apeiros-46B/qalc.nvim/tree/rewrite',
 		start_date = '2022-12',
 		end_date = 'present',
 		note = 'undergoing a rewrite',
+		stack = { 'Lua', 'C++', 'Neovim', 'libqalculate' },
 		link_desc = 'is a reactive text-based calculator inside of Neovim.',
 		long_desc = [[
 			You can write expressions that depend on others, edit their values, and
@@ -37,10 +31,10 @@ local projects = {
 	},
 	{
 		name = 'lwk',
-		tags = { 'Lua', 'HTML', 'CSS' },
 		url = 'https://github.com/Apeiros-46B/lwk',
 		start_date = '2026-03',
 		end_date = '2026-06',
+		stack = { 'Lua', 'HTML', 'CSS' },
 		link_desc = '(Lua Website Kit) is a web templating engine/SSG in ~1300 SLOC.',
 		long_desc = [[
 			It's mostly a bespoke tool made for this website because I got tired of
@@ -52,24 +46,25 @@ local projects = {
 	},
 	{
 		name = 'tspmo',
-		tags = { 'TypeScript', 'ElysiaJS', 'discord.js' },
 		url = 'https://github.com/Apeiros-46B/tspmo',
 		start_date = '2026-02',
 		end_date = '2026-03',
+		stack = { 'TypeScript', 'ElysiaJS', 'discord.js' },
 		link_desc = '(TypeScript-Powered Media Organizer) is a basic tagged media gallery.',
 		long_desc = [[
 			It was built for organizing memes and reaction images for me and a few friends,
-			and primarily designed for interaction via Discord, supporting in-app uploads and
-			search through both tags and full-text search (title and description). It also
-			supports importing posts from sources like Discord attachments and Tenor GIFs.
+			and primarily designed for interaction via a Discord bot frontend, supporting
+			in-app uploads and search through both stack and full-text search (title and
+			description). It also supports importing posts from Tenor GIFs or attachments
+			on Discord messages.
 		]],
 	},
 	{
 		name = 'sidechain',
-		tags = { 'Rust' },
 		url = 'https://github.com/Apeiros-46B/sidechain',
 		start_date = '2026-01',
 		end_date = '2026-01',
+		stack = { 'Rust' },
 		link_desc = 'is a program that uses ffmpeg to transcode audio files in bulk.',
 		long_desc = [[
 			I wanted something to make a synced mirror of my music library in Opus for my phone,
@@ -81,21 +76,16 @@ local projects = {
 	},
 	{
 		name = 'raytracer',
-		tags = {
-			'Rust',
-			'GLSL',
-			'WebGL',
-			{ href = 'https://github.com/emilk/egui', name = 'egui' },
-		},
 		url = 'https://github.com/Apeiros-46B/raytracer',
 		start_date = '2024-05',
 		end_date = '2024-06',
-		link_desc = 'is a naive path-tracer in the browser that renders simple objects',
+		stack = { 'Rust', 'GLSL', 'WebGL', 'egui' },
+		link_desc = 'is a path-tracing renderer in the browser that supports simple objects',
 		long_desc = [[
-			(ellipsoids and boxes). It uses a stochastic method to approximate realistic
-			lighting, implemented as a fragment shader in OpenGL for GPU acceleration.
-			It's written in Rust using egui for UI interaction and can run as a native
-			application too.
+			(ellipsoids and boxes). It uses a naive stochastic method to approximate
+			realistic lighting, implemented as a fragment shader in OpenGL for GPU
+			acceleration. It's written in Rust using egui for UI interaction and can run
+			as a native application too.
 		]],
 	},
 }
@@ -114,33 +104,31 @@ GlobalStyles {
 	},
 }
 
-local function Project(args)
-	return Section(args.name, h2) {
-		class = 'project-entry',
-		p {
-			class = 'project-notes',
-			Date(args.start_date, args.end_date),
-			If (args.note) (function()
-				return ' (' .. args.note .. ')'
-			end),
-		},
-		TagList(args.tags),
-		p {
-			strong {
-				a { href = args.url, args.name },
-				' ' .. args.link_desc,
-			},
-			args.long_desc,
-		},
-	}
-end
-
 return { ord = 2 }, Page {
-	title = 'apeiros.xyz - projects',
+	title = 'projects',
 	description = 'Software projects',
 	head = {},
 	content = {
 		h1 'projects',
-		For (projects) (Project),
+		For (projects) (function(data)
+			return Section(data.name, h2) {
+				class = 'project-entry',
+				p {
+					class = 'project-notes',
+					Date(data.start_date, data.end_date),
+					If (data.note) (function()
+						return ' (' .. data.note .. ')'
+					end),
+				},
+				TagList(data.stack),
+				p {
+					strong {
+						a { href = data.url, data.name },
+						' ' .. data.link_desc,
+					},
+					data.long_desc,
+				},
+			}
+		end),
 	},
 }

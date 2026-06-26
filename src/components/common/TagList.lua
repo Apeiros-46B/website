@@ -14,14 +14,18 @@ GlobalStyles {
 			font_size = pct(70),
 			font_weight = bold,
 			background_color = var 'bg_raised',
-		},
 
-		Rule '& a' {
-			text_decoration = none,
+			Rule '&> a' {
+				text_decoration = none,
 
-			Rule '&:hover' {
-				text_decoration = underline,
-			}
+				Rule '&:hover' {
+					text_decoration = underline,
+				}
+			},
+
+			Rule '&> span' {
+				font_weight = normal,
+			},
 		},
 	},
 }
@@ -34,11 +38,19 @@ return function(tags)
 		For (tags) (function(tag)
 			if type(tag) == 'string' then
 				return li(tag)
-			elseif tag.href then
-				return li(a {
-					href = tag.href,
-					tag.name,
-				})
+			else
+				return li {
+					If (tag.href) (
+						a { href = tag.href, tag.name }
+					) (
+						tag.name
+					),
+					If (tag.count) (function()
+						return span {
+							' (' .. tag.count .. ')'
+						}
+					end)
+				}
 			end
 		end)
 	}
