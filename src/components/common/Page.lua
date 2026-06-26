@@ -1,3 +1,4 @@
+local util = require('ssg.util')
 local layout = require('src.data.layout')
 
 local wide_grid_template = ('%drem minmax(0, %drem) %drem'):format(
@@ -112,17 +113,28 @@ return Component.new('Page', function(_, _, args, ctx)
 	end
 
 	local title_str = args.title
-	if not title_str then
-		title_str = 'apeiros.xyz'
-	elseif not title_str:match('apeiros%.xyz') then
-		title_str = title_str .. ' - apeiros.xyz'
+	if not title_str:match('[Aa]peiros') then
+		title_str = title_str .. ' - Apeiros'
+	end
+	title_str = title_str:gsub('^%l', string.upper)
+
+	if #title_str > 55 then
+		util.log('title="' .. title_str .. '" exceeds 55 chars', 'warn', 'Page')
+	end
+
+	local desc_str = args.desc
+		:gsub('[%s\r\n]+', ' ') -- collapse whitespaces into single space
+		:gsub('^%s*(.-)%s*$', '%1') -- trim
+
+	if #desc_str > 120 then
+		util.log('desc="' .. desc_str .. '" exceeds 120 chars', 'warn', 'Page')
 	end
 
 	local og = {
 		{ 'site_name', 'apeiros.xyz' },
 		{ 'url', 'https://apeiros.xyz' .. ctx.page.url },
-		{ 'title', args.title },
-		{ 'description', args.description },
+		{ 'title', title_str },
+		{ 'description', desc_str },
 	}
 	if args.opengraph then
 		for _, entry in ipairs(args.opengraph) do
@@ -145,7 +157,7 @@ return Component.new('Page', function(_, _, args, ctx)
 
 			meta { name = 'author', content = 'Apeiros' },
 			meta { name = 'generator', content = 'lwk' },
-			meta { name = 'description', content = args.description },
+			meta { name = 'description', content = desc_str },
 			For (og_props) (meta),
 
 			link {
@@ -163,14 +175,6 @@ return Component.new('Page', function(_, _, args, ctx)
 
 				Navbar, -- header#navbar-header
 
-				If (args.left_sidebar) {
-					div {
-						id = 'left-sidebar',
-						class = 'sidebar',
-						div { class = 'sidebar-card', args.left_sidebar }
-					}
-				},
-
 				div {
 					id = 'content-outer',
 					div { id = 'content', args.content },
@@ -178,13 +182,23 @@ return Component.new('Page', function(_, _, args, ctx)
 					footer {
 						HorizList {
 							li { '© Apeiros ' .. os.date('%Y') },
-							If (not args.about_shown) {
+							If (args.title ~= 'colophon') {
 								li {
-									a { href = '/about', 'about' },
+									a { href = '/colophon', 'colophon' },
 								},
 							}
 						},
 					},
+				},
+
+				-- sidebars may contain headings, h1 is probably in args.content so for it to
+				-- come first, the sidebars need to come afterwards
+				If (args.left_sidebar) {
+					div {
+						id = 'left-sidebar',
+						class = 'sidebar',
+						div { class = 'sidebar-card', args.left_sidebar }
+					}
 				},
 
 				If (args.right_sidebar) {

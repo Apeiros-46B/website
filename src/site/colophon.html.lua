@@ -1,12 +1,11 @@
 return Provide {
-	nav_ephemeral_page = 'about',
+	nav_ephemeral_page = 'colophon',
 	Page {
-		title = 'about',
-		description = 'About this website',
-		about_shown = true,
+		title = 'colophon',
+		desc = 'Learn about how this website was built using tools like Lua.',
 		head = {},
 		content = {
-			h1 'about',
+			h1 'colophon',
 
 			p {
 				'This website is made with ',
@@ -22,7 +21,7 @@ return Provide {
 				'.',
 				[[
 					It is also is designed to be fully functional without JavaScript;
-					the only usage of JavaScript is for
+					the only usage of JavaScript on this site is for
 				]],
 				' ',
 				a {

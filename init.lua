@@ -1,5 +1,5 @@
 require('ssg.path')('ssg')
-local util = require('util')
+local util = require('ssg.util')
 
 -- remove nil holes from a numeric table
 -- if max_index is not provided, it's found using iteration via pairs
@@ -143,7 +143,7 @@ local function blog_add_next_prev(manifest)
 	end
 end
 
-require('router').process({
+require('ssg.router').process({
 	in_dir = './src/site',
 	out_dir = './dist',
 	components_dir = './src/components',

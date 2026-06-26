@@ -87,7 +87,7 @@ return function(pages)
 				},
 				div { class = 'post-sep' },
 				ArticleTagList(page.meta.tags),
-				p(page.meta.description),
+				p(page.meta.desc),
 			}
 		end),
 	}

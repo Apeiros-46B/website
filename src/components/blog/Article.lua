@@ -223,7 +223,7 @@ return Component.new('Article', function(_, _, args, ctx)
 
 		Page {
 			title = ctx.page.meta.title,
-			description = ctx.page.meta.description,
+			desc = ctx.page.meta.desc,
 			opengraph = {
 				{ 'type', 'article' },
 				{ 'article', og_article },
@@ -235,11 +235,8 @@ return Component.new('Article', function(_, _, args, ctx)
 			content = article {
 				header {
 					class = 'article-header',
-					h1 { ctx.page.meta.title },
-					p {
-						class = 'article-description',
-						ctx.page.meta.description,
-					},
+					h1(ctx.page.meta.title),
+					p(ctx.page.meta.desc),
 					p {
 						class = 'article-timestamp',
 						Date(ctx.page.meta.date),

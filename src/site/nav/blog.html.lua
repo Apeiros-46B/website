@@ -1,6 +1,6 @@
 return { ord = 4 }, Page {
 	title = 'blog',
-	description = 'Blog posts',
+	desc = 'Read articles on miscellaneous technical topics, written by Apeiros.',
 	head = {},
 	content = {
 		h1 'blog',

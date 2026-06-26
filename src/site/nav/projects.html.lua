@@ -1,7 +1,7 @@
 local projects = {
 	{
 		name = 'avalon',
-		url = 'https://github.com/Apeiros-46B/lwk',
+		url = 'https://codeberg.org/avalonOS/avalon',
 		start_date = '2026-04',
 		end_date = 'present',
 		stack = { 'Zig', 'RISC-V' },
@@ -67,11 +67,11 @@ local projects = {
 		stack = { 'Rust' },
 		is_a = 'is a bulk audio transcoder.',
 		desc = [[
-			I wanted something to make a synced Opus mirror of my music library for my
-			phone, and the existing solutions I looked had limitations like re-transcoding
-			lossy files files, so I made this, which uses SQLite to track files and ffmpeg
-			to transcode them, skipping previously transcoded tracks and passing through
-			lossy files, album covers, and other files.
+			I wanted a way to automatically to mirror my music library in Opus for my phone,
+			and the existing solutions I looked had limitations like re-transcoding lossy
+			files, so I made this, which uses SQLite to track files and ffmpeg to transcode
+			them, skipping previously transcoded tracks and passing through lossy tracks,
+			album covers, and other unrecognized files.
 		]],
 	},
 	{
@@ -106,7 +106,7 @@ GlobalStyles {
 
 return { ord = 2 }, Page {
 	title = 'projects',
-	description = 'Software projects',
+	desc = "Explore Apeiros's software projects: SSGs, image boards, OSes, and more.",
 	head = {},
 	content = {
 		h1 'projects',

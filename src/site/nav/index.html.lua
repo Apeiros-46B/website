@@ -62,10 +62,28 @@ GlobalStyles {
 }
 
 return { ord = 1 }, Page {
-	description = "Apeiros's homepage",
-	head = {},
+	title = 'Apeiros - programming and photography',
+	desc = 'Personal site of Apeiros, a CS student, programmer, and photographer.',
+	head = {
+		JsonLd {
+			Type = 'Person',
+			name = 'Apeiros',
+			alternateName = 'Apeiros-46B',
+			nationality = {
+				Type = 'Country',
+				name = 'Canada',
+				identifier = 'CA',
+			},
+			sameAs = {
+				'https://x.com/apeiros46b',
+				'https://github.com/Apeiros-46B',
+				'https://codeberg.org/Apeiros',
+			},
+			url = 'https://apeiros.xyz',
+		},
+	},
 	content = {
-		h1 { id = 'title', Logo, 'apeiros.xyz' },
+		h1 { id = 'title', Logo, 'Apeiros' },
 
 		section {
 			id = 'socials-outer',

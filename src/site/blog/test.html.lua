@@ -1,6 +1,6 @@
 return {
 	title = "Test",
-	description = 'Test page',
+	desc = 'Test page',
 	date = '2026-03-24',
 	updated_date = '2026-03-25',
 	tags = { 'Lua', 'SSG' },

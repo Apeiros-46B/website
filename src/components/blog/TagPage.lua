@@ -21,13 +21,20 @@ return function(ctx)
 	end
 
 	local title = 'articles about ' .. display_name
+	local desc
+	if display_name == 'opinion' then
+		desc = "Browse Apeiros's opinion pieces."
+	else
+		-- it's a topic
+		desc = "Browse Apeiros's articles about " .. display_name .. '.'
+	end
 
 	return Provide {
 		nav_active = '/blog',
 
 		Page {
 			title = title,
-			description = '',
+			desc = desc,
 			head = {},
 			content = {
 				h1(title),

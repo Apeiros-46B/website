@@ -1,6 +1,6 @@
 return {
 	title = "B2",
-	description = "Foo bar baz quux B2",
+	desc = "Foo bar baz quux B2",
 	date = "2026-05-04",
 	series = "Series B",
 	tags = { "bar", "baz" },
