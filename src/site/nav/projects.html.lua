@@ -1,3 +1,5 @@
+-- TODO: make an image widget that shows a label above similar to the codeblock widget
+-- TODO: make image sizes better, currently some are too large/too wide
 local projects = {
 	{
 		name = 'avalon',
@@ -7,9 +9,9 @@ local projects = {
 		stack = { 'Zig', 'RISC-V' },
 		is_a = 'is a work-in-progress experimental OS.',
 		desc = [[
-			It's still very incomplete and nowhere near any semblance of usability (just a
-			tiny and insecure kernel with a buddy allocator and a round-robin scheduler),
-			but my eventual goals are to explore some non-Unix-like OS designs (microkernel,
+			It's still very incomplete and nowhere near any semblance of usability (as of
+			right now, the only complete part is the physical memory manager), but my
+			eventual goal is to explore some non-Unix-like OS designs (microkernel,
 			single address space leveraging CHERI, capability-based security, etc.) and
 			experiment with human-computer interaction and UI design in the future.
 		]],
@@ -28,6 +30,10 @@ local projects = {
 			features like unit conversion, algebra, and calculus are available, integrated
 			with diagnostics, syntax highlighting, and autocompletion support.
 		]],
+		media = img {
+			loading = 'lazy',
+			src = '/assets/projects/qalc.webp',
+		},
 	},
 	{
 		name = 'lwk',
@@ -43,6 +49,9 @@ local projects = {
 			compiling them into raw HTML+CSS. It also supports file handlers (extensible
 			enough to do something like write your own markdown processor in Lua).
 		]],
+		media = CodeBlock {
+			data = require('src.data.code.projects.lwk'),
+		},
 	},
 	{
 		name = 'tspmo',
@@ -58,6 +67,10 @@ local projects = {
 			description). It also supports importing posts from Tenor GIFs or attachments
 			on Discord messages.
 		]],
+		media = img {
+			loading = 'lazy',
+			src = '/assets/projects/tspmo.webp',
+		},
 	},
 	{
 		name = 'sidechain',
@@ -87,6 +100,10 @@ local projects = {
 			acceleration. It's written in Rust using egui for UI interaction and can run
 			as a native application too.
 		]],
+		media = img {
+			loading = 'lazy',
+			src = '/assets/projects/raytracer.webp',
+		},
 	},
 }
 
@@ -101,6 +118,9 @@ GlobalStyles {
 		Rule '&> :is(time, span)' {
 			font_size = pct(100),
 		},
+	},
+	Rule '.project-media' {
+		margin_top = rem(0.7),
 	},
 }
 
@@ -121,6 +141,12 @@ return { ord = 2 }, Page {
 					end),
 				},
 				TagList(data.stack),
+				If (data.media) {
+					div {
+						class = 'project-media',
+						data.media,
+					},
+				},
 				p {
 					strong {
 						a { href = data.url, data.name },

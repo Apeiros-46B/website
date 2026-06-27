@@ -55,7 +55,6 @@ return function(ctx)
 			id = 'navbar',
 			HideScrollbar,
 
-			-- logo
 			For (ctx.manifest.groups.nav) (function(page)
 				local name = page.url == '/index' and 'home' or page.slug
 				local link = page.url == '/index' and '/' or page.url

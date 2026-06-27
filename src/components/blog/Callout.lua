@@ -23,6 +23,7 @@ GlobalStyles {
 		},
 
 		Rule '&> .callout-title' {
+			margin_bottom = rem(0.5),
 			font_weight = bold,
 			color = var 'callout_accent_color',
 		},

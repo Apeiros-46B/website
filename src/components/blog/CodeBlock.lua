@@ -1,22 +1,15 @@
+-- TODO: make the class names more concise
+-- TODO: make the ellipsis have a comment marker depending on which langauge it is
 local TABLE = require('table')
 local core = require('dsl.core')
-
-local function ornament_border(color)
-	return { var 'ornament_thickness', solid, var(color) }
-end
-
-local fake_border = 'linear-gradient(to right, var(--fg_sep) var(--ornament-thickness), transparent var(--ornament-thickness))'
 
 local ellipsis_html = '<span class="codeblock-line"><span class="codeblock-line-text"><span class="codeblock-comment">...</span></span></span>\n'
 
 GlobalStyles {
 	Rule '.codeblock-outer pre' {
 		overflow_x = auto,
+		overscroll_behavior_x = none, -- avoid our hacky fake borders being exposed
 		padding_bottom = rem(1),
-
-		-- painted underneath the lines
-		-- spans the padding area, extending behind the horizontal scrollbar
-		background_image = fake_border,
 	},
 	Rule '.codeblock-outer code' {
 		display = flex,
@@ -27,29 +20,36 @@ GlobalStyles {
 
 	Rule '.codeblock-outer' {
 		background_color = var 'bg_raised',
+
+		-- fake left border that extends through all children without affecting layout
+		box_shadow = 'inset var(--ornament-thickness) 0 0 0 var(--fg-sep)',
 	},
 	Rule '.codeblock-label' {
-		padding_left = rem(1),
+		padding_left = 'calc(var(--ornament-thickness) + 1rem)',
 		padding_top = rem(1),
-		padding_bottom = rem(1),
-		border_left = ornament_border 'fg_sep',
 	},
 
 	Rule '.codeblock-line' {
 		-- expand to full scrollable width
 		display = flex,
 		width = pct(100),
+		font_size = pct(95),
 
 		Rule '&.highlighted' {
 			background_color = var 'bg_accent',
 		},
+
+		Rule '&:first-child' {
+			margin_top = rem(1)
+		},
 	},
 
-	-- dynamic per-line border that stays still when scrolling
+	-- overlays on top of fake border (inset shadow) for per-line highlight, stays
+	-- anchored to the left edge when scrolling horizontally
 	Rule '.codeblock-line::before' {
 		content = Quoted '',
 		position = sticky,
-		left = 0, -- pinned to the left edge
+		left = 0,
 		flex_shrink = 0,
 		width = var 'ornament_thickness',
 		background_color = var 'fg_sep',
@@ -156,7 +156,7 @@ GlobalStyles {
 
 local class_cache = {}
 
-return Component.new('CodeBlock', function(_, _, args, _)
+return function(args)
 	local highlighted = {}
 	if type(args.highlight) == 'table' then
 		for _, range in ipairs(args.highlight) do
@@ -273,4 +273,4 @@ return Component.new('CodeBlock', function(_, _, args, _)
 			},
 		},
 	}
-end)
+end

@@ -251,8 +251,10 @@ return Component.new('Article', function(_, _, args, ctx)
 
 				hr,
 				args,
-				hr,
 
+				If (next or prev) {
+					hr,
+				},
 				article_nav,
 			},
 		},

@@ -82,7 +82,7 @@ GlobalStyles {
 		background_color = var 'bg_main',
 	},
 
-	Rule ':where(#content, section, article, details) > :nth-last-child(n+2):not(summary)' {
+	Rule ':where(#content, section, article, details) > :not(:last-child):not(summary)' {
 		margin_bottom = rem(1),
 	},
 	Rule 'footer' {
@@ -166,6 +166,13 @@ return Component.new('Page', function(_, _, args, ctx)
 				href = '/assets/favicon.svg',
 			},
 			LinkGlobalStyles,
+			-- TODO: reenable analytics
+			-- script {
+			-- 	defer = true,
+			-- 	data_domain = 'apeiros.xyz',
+			-- 	data_api = 'https://plausible.apeiros.xyz/main',
+			-- 	src = 'https://plausible.apeiros.xyz/assets/main.js'
+			-- },
 
 			args.head,
 		},
