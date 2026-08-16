@@ -62,7 +62,7 @@ GlobalStyles {
 }
 
 return { ord = 1 }, Page {
-	title = 'Apeiros - programming and photography',
+	title = "Apeiros's website",
 	desc = 'Personal site of Apeiros, a CS student, programmer, and photographer.',
 	head = {
 		JsonLd {

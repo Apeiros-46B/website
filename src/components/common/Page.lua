@@ -114,9 +114,8 @@ return Component.new('Page', function(_, _, args, ctx)
 
 	local title_str = args.title
 	if not title_str:match('[Aa]peiros') then
-		title_str = title_str .. ' - Apeiros'
+		title_str = title_str:gsub('^%l', string.upper) .. ' - Apeiros'
 	end
-	title_str = title_str:gsub('^%l', string.upper)
 
 	if #title_str > 55 then
 		util.log('title="' .. title_str .. '" exceeds 55 chars', 'warn', 'Page')
@@ -166,13 +165,12 @@ return Component.new('Page', function(_, _, args, ctx)
 				href = '/assets/favicon.svg',
 			},
 			LinkGlobalStyles,
-			-- TODO: reenable analytics
-			-- script {
-			-- 	defer = true,
-			-- 	data_domain = 'apeiros.xyz',
-			-- 	data_api = 'https://plausible.apeiros.xyz/main',
-			-- 	src = 'https://plausible.apeiros.xyz/assets/main.js'
-			-- },
+			script {
+				defer = true,
+				data_domain = 'apeiros.xyz',
+				data_api = 'https://stats.apeiros.xyz/main',
+				src = 'https://stats.apeiros.xyz/assets/main.js'
+			},
 
 			args.head,
 		},

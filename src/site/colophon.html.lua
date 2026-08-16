@@ -15,7 +15,7 @@ return Provide {
 				},
 				'. The code for the site can be found in ',
 				a {
-					href = 'https://github.com/Apeiros-46B/www',
+					href = 'https://github.com/Apeiros-46B/website',
 					'this repository',
 				},
 				'.',
@@ -36,12 +36,12 @@ return Provide {
 			},
 
 			p {
-				'The light mode colorscheme used on this website is ',
+				'The light mode colorscheme used on this website is my own colorscheme, ',
 				a {
 					href = 'https://github.com/Apeiros-46B/elysium',
 					'elysium',
 				},
-				', my own colorscheme, and the dark mode colorscheme is ',
+				', and the dark mode colorscheme is ',
 				a {
 					href = 'https://github.com/sainnhe/everforest',
 					'Everforest by sainnhe',
