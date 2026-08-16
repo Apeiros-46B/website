@@ -22,7 +22,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y luajit
 
       - name: Run site generation
-        run: lua init.lua
+        run: luajit init.lua
 
       - name: Copy HTML to pages branch
         env:
