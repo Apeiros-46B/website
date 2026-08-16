@@ -1,34 +1,49 @@
 -- TODO: make an image widget that shows a label above similar to the codeblock widget
--- TODO: make image sizes better, currently some are too large/too wide
+-- TODO: make a lightbox component, some images are too large rn
 local projects = {
+	{
+		name = 'reverie',
+		start_date = '2026-01',
+		end_date = 'present',
+		note = 'work-in-progress',
+		stack = { 'Rust', 'Slang', 'Vulkan' },
+		is_a = 'is a work-in-progress voxel rendering engine.',
+		desc = [[
+			I've been working on it on and off for a while, but most of my current progress
+			is in backend Vulkan abstractions and multithreading technicalities, so I haven't
+			actually tackled the bulk of the voxel rendering work yet. However, I have a
+			rough idea of the potential architecture and I'm working on bringing it to life.
+		]],
+	},
 	{
 		name = 'avalon',
 		url = 'https://codeberg.org/avalonOS/avalon',
 		start_date = '2026-04',
 		end_date = 'present',
+		note = 'work-in-progress',
 		stack = { 'Zig', 'RISC-V' },
 		is_a = 'is a work-in-progress experimental OS.',
 		desc = [[
 			It's still very incomplete and nowhere near any semblance of usability (as of
 			right now, the only complete part is the physical memory manager), but my
-			eventual goal is to explore some non-Unix-like OS designs (microkernel,
-			single address space leveraging CHERI, capability-based security, etc.) and
-			experiment with human-computer interaction and UI design in the future.
+			eventual goal is to explore some non-POSIX OS designs (microkernel, single
+			address space, capability-based security, etc.) and experiment with
+			human-computer interaction and UI design in the future.
 		]],
 	},
 	{
 		name = 'qalc.nvim',
 		url = 'https://github.com/Apeiros-46B/qalc.nvim/tree/rewrite',
 		start_date = '2022-12',
-		end_date = 'present',
+		end_date = '2023-01',
 		note = 'undergoing a rewrite',
 		stack = { 'Lua', 'C++', 'Neovim', 'libqalculate' },
 		is_a = 'is a reactive text-based calculator inside of Neovim.',
 		desc = [[
 			You can write expressions that depend on others, edit their values, and watch
 			the results update in real time. With libqalculate as a backend, advanced
-			features like unit conversion, algebra, and calculus are available, integrated
-			with diagnostics, syntax highlighting, and autocompletion support.
+			features like unit conversion, algebra, and calculus are available and
+			integrated with diagnostics, syntax highlighting, and autocompletion support.
 		]],
 		media = img {
 			loading = 'lazy',
@@ -40,14 +55,15 @@ local projects = {
 		url = 'https://github.com/Apeiros-46B/lwk',
 		start_date = '2026-03',
 		end_date = '2026-06',
+		note = 'undergoing a rewrite',
 		stack = { 'Lua', 'HTML', 'CSS' },
 		is_a = '(Lua Website Kit) is a web templating engine/SSG in ~1300 SLOC.',
 		desc = [[
 			It's mostly a bespoke tool made for this website because I got tired of
 			hand-writing HTML and CSS but didn't want to use a complex JS framework.
-			It allows pages, templates, and components to be authored with a Lua-based DSL,
-			compiling them into raw HTML+CSS. It also supports file handlers (extensible
-			enough to do something like write your own markdown processor in Lua).
+			It allows pages, templates, and reusable components to be authored with
+			a Lua-based DSL, compiling them into raw HTML+CSS. It also supports file
+			handlers (powerful enough to do something like write a markdown processor).
 		]],
 		media = CodeBlock {
 			data = require('src.data.code.projects.lwk'),
@@ -63,7 +79,7 @@ local projects = {
 		desc = [[
 			It was built for organizing memes and reaction images for me and a few friends,
 			and primarily designed for interaction via a Discord bot frontend, supporting
-			in-app uploads and search through both stack and full-text search (title and
+			in-app uploads and search through both tags and full-text search (title and
 			description). It also supports importing posts from Tenor GIFs or attachments
 			on Discord messages.
 		]],
@@ -78,13 +94,13 @@ local projects = {
 		start_date = '2026-01',
 		end_date = '2026-01',
 		stack = { 'Rust' },
-		is_a = 'is a bulk audio transcoder.',
+		is_a = 'is a simple bulk audio transcoder.',
 		desc = [[
-			I wanted a way to automatically to mirror my music library in Opus for my phone,
-			and the existing solutions I looked had limitations like re-transcoding lossy
-			files, so I made this, which uses SQLite to track files and ffmpeg to transcode
-			them, skipping previously transcoded tracks and passing through lossy tracks,
-			album covers, and other unrecognized files.
+			I wanted a way to automatically to mirror the lossless portion of my music
+			library in Opus for my phone, and the existing solutions I found had limitations
+			like re-transcoding lossy files, so I made this, which uses SQLite to track
+			files and ffmpeg to transcode them, skipping previously transcoded tracks and
+			passing through lossy tracks, album covers, and other unrecognized files.
 		]],
 	},
 	{
@@ -121,6 +137,10 @@ GlobalStyles {
 	},
 	Rule '.project-media' {
 		margin_top = rem(0.7),
+
+		Rule '&> img' {
+			max_height = vh(30),
+		},
 	},
 }
 
@@ -149,7 +169,11 @@ return { ord = 2 }, Page {
 				},
 				p {
 					strong {
-						a { href = data.url, data.name },
+						If (data.url) {
+							a { href = data.url, data.name },
+						} {
+							data.name
+						},
 						' ' .. data.is_a,
 					},
 					data.desc,

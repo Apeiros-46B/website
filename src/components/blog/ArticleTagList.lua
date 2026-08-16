@@ -36,5 +36,11 @@ return Component.new('ArticleTagList', function(_, _, args, ctx)
 		end
 	end
 
-	return TagList(out)
+	if #out == 0 then
+		-- TODO: probably shouldn't hardcode this fallback, or just never make tagless articles
+		-- (this is for the main blog page)
+		return p 'No tags yet.'
+	else
+		return TagList(out)
+	end
 end)

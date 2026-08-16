@@ -1,5 +1,6 @@
 -- vim: textwidth=86 fo=tjnql
 return {
+	skip = true, -- probably revisit ts at a later date when i finish the rewrite
 	title = 'Using Lua to build a website',
 	desc = 'Disorganized thoughts about my Lua static site generator',
 	date = '2026-06-26',
@@ -133,9 +134,6 @@ return {
 					which is fine for small outputs but will be memory-intensive for huge ones.
 					This might also have some GC pressure issues due to frequent allocation and
 					deallocation of DOM node tables (although I haven't profiled any of this).
-					Having manual control over memory and allocating nodes from an arena per
-					page and then streaming the output to a file in chunks would probably be
-					better.
 				]]
 			},
 			li {
@@ -148,22 +146,13 @@ return {
 					allowed tags/keywords.
 				]]
 			},
-			li {
-				[[
-					Theoretically, it should be possible to parallelize page builds, since they
-					don't depend on each other. The only global state is the CSS bundle, which
-					can probably be handled separately on a dedicated worker thread. The main
-					issue is that this will require a host program (in something like C, C++, or
-					Rust) to embed the Lua in, because it isn't possible to do true
-					multithreading in a pure Lua program.
-				]]
-			},
+			-- TODO: talk about potential async and incremental rebuilds
 		},
 		p {
 			[[
 				In the future, I will probably rewrite this in Rust with a Lua binding to
 				expose the same API surface. Implementation-wise, it won't be as simple, but
-				it'll be leagues more performant and robust. I might also add more nice
+				it'll be much more performant and robust. I might also add more nice
 				features like metamethods for CSS units, which would compile arithmetic
 				expressions like
 			]],
