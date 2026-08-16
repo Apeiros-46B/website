@@ -1,0 +1,38 @@
+name: Build and Deploy Dist
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install LuaJIT
+        run: sudo apt-get update && sudo apt-get install -y luajit
+
+      - name: Run site generation
+        run: lua init.lua
+
+      - name: Copy HTML to pages branch
+        env:
+          TGT_BRANCH: pages
+        run: |
+          cd dist
+          git init
+          git branch -M $TGT_BRANCH
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Deploy generated HTML"
+          git push --force "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" $TGT_BRANCH
