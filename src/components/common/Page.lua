@@ -186,12 +186,12 @@ return Component.new('Page', function(_, _, args, ctx)
 					FlexFill,
 					footer {
 						HorizList {
-							li { '© Apeiros ' .. os.date('%Y') },
+							li ('© Apeiros ' .. os.date('%Y')),
 							If (args.title ~= 'colophon') {
 								li {
 									a { href = '/colophon', 'colophon' },
 								},
-							}
+							},
 						},
 					},
 				},

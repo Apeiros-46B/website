@@ -2,7 +2,7 @@ return Provide {
 	nav_ephemeral_page = 'colophon',
 	Page {
 		title = 'colophon',
-		desc = 'Learn about how this website was built using tools like Lua.',
+		desc = 'Learn about how this website was built using Lua.',
 		head = {},
 		content = {
 			h1 'colophon',

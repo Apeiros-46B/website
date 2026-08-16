@@ -1,20 +1,26 @@
 local socials = {
-	-- platform corresponds to FaIcon ids
+	-- platform corresponds to FaIcon ids, and is also shown as text
+	-- if `text` is given it overrides platform for the display text
 	{
 		platform = 'GitHub',
-		username = 'Apeiros-46B',
 		url = 'https://github.com/Apeiros-46B',
 	},
 	{
+		platform = 'Codeberg',
+		url = 'https://codeberg.org/Apeiros',
+	},
+	{
 		platform = 'Twitter',
-		username = 'apeiros46b',
 		url = 'https://x.com/apeiros46b',
 	},
 	{
-		platform = 'Email',
-		username = 'apeiros46@gmail.com',
-		url = 'mailto:apeiros46@gmail.com',
+		platform = 'Last.fm',
+		url = 'https://last.fm/user/Apeiros-46B',
 	},
+	{
+		platform = 'Email',
+		url = 'mailto:me@apeiros.xyz',
+	}
 }
 
 GlobalStyles {
@@ -37,7 +43,7 @@ GlobalStyles {
 		color = var 'fg_dim',
 	},
 
-	Query '@media' { min_width = px(550) } {
+	Query '@media' { min_width = px(490) } {
 		Rule '#title' {
 			justify_content = center,
 		},
@@ -47,7 +53,7 @@ GlobalStyles {
 		},
 	},
 
-	Query '@media' { max_width = px(550) } {
+	Query '@media' { max_width = px(490) } {
 		Rule '#title' {
 			justify_content = flex_start,
 		},
@@ -93,11 +99,7 @@ return { ord = 1 }, Page {
 				For (socials) (function(entry)
 					return li {
 						FaIcon(entry.platform),
-						a {
-							href = entry.url,
-							aria_label = entry.platform,
-							entry.username,
-						},
+						a { href = entry.url, entry.platform },
 					}
 				end),
 			},
