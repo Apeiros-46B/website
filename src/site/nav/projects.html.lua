@@ -11,26 +11,11 @@ local projects = {
 		desc = [[
 			I've been working on it on and off for a while, but most of my current progress
 			is in backend Vulkan abstractions and multithreading technicalities, so I haven't
-			actually tackled the bulk of the voxel rendering work yet. However, I have a
-			rough idea of the potential architecture and I'm working on bringing it to life.
+			actually tackled the bulk of the voxel rendering work yet, but I've mostly planned
+			out the engine architecture already.
 		]],
 	},
-	{
-		name = 'avalon',
-		url = 'https://codeberg.org/avalonOS/avalon',
-		start_date = '2026-04',
-		end_date = 'present',
-		note = 'work-in-progress',
-		stack = { 'Zig', 'RISC-V' },
-		is_a = 'is a work-in-progress experimental OS.',
-		desc = [[
-			It's still very incomplete and nowhere near any semblance of usability (as of
-			right now, the only complete part is the physical memory manager), but my
-			eventual goal is to explore some non-POSIX OS designs (microkernel, single
-			address space, capability-based security, etc.) and experiment with
-			human-computer interaction and UI design in the future.
-		]],
-	},
+	-- TODO: add back avalon when i actually have something to show for it
 	{
 		name = 'qalc.nvim',
 		url = 'https://github.com/Apeiros-46B/qalc.nvim/tree/rewrite',
