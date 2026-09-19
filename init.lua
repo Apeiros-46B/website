@@ -1,6 +1,9 @@
 require('ssg.path')('ssg')
+-- local dsl = require('ssg.dsl.init')
 local util = require('ssg.util')
+local router = require('ssg.router')
 
+-- {{{ transforms
 -- remove nil holes from a numeric table
 -- if max_index is not provided, it's found using iteration via pairs
 local function compact_table(t, max_index)
@@ -142,8 +145,13 @@ local function blog_add_next_prev(manifest)
 		end
 	end
 end
+-- }}}
 
-require('ssg.router').process({
+router.register_handler('lua', 'svg', function(src)
+	return nil, loadfile(src)
+end)
+
+router.process({
 	in_dir = './src/site',
 	out_dir = './dist',
 	components_dir = './src/components',

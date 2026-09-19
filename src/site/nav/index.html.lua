@@ -1,13 +1,12 @@
+local show_codeberg = false
+local responsive_width = show_codeberg and px(490) or px(300)
+
 local socials = {
 	-- platform corresponds to FaIcon ids, and is also shown as text
 	-- if `text` is given it overrides platform for the display text
 	{
 		platform = 'GitHub',
 		url = 'https://github.com/Apeiros-46B',
-	},
-	{
-		platform = 'Codeberg',
-		url = 'https://codeberg.org/Apeiros',
 	},
 	{
 		platform = 'Twitter',
@@ -22,6 +21,13 @@ local socials = {
 		url = 'mailto:me@apeiros.xyz',
 	}
 }
+
+if show_codeberg then
+	require('table').insert(socials, 2, {
+		platform = 'Codeberg',
+		url = 'https://codeberg.org/Apeiros',
+	})
+end
 
 GlobalStyles {
 	Rule '#title' {
@@ -43,7 +49,7 @@ GlobalStyles {
 		color = var 'fg_dim',
 	},
 
-	Query '@media' { min_width = px(490) } {
+	Query '@media' { min_width = responsive_width } {
 		Rule '#title' {
 			justify_content = center,
 		},
@@ -53,7 +59,7 @@ GlobalStyles {
 		},
 	},
 
-	Query '@media' { max_width = px(490) } {
+	Query '@media' { max_width = responsive_width } {
 		Rule '#title' {
 			justify_content = flex_start,
 		},
@@ -83,7 +89,7 @@ return { ord = 1 }, Page {
 			sameAs = {
 				'https://x.com/apeiros46b',
 				'https://github.com/Apeiros-46B',
-				'https://codeberg.org/Apeiros',
+				show_codeberg and 'https://codeberg.org/Apeiros' or nil,
 			},
 			url = 'https://apeiros.xyz',
 		},

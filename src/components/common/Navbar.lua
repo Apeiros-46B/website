@@ -13,7 +13,7 @@ GlobalStyles {
 		top = 0,
 		position = sticky,
 		margin_top = rem(1),
-		background_color = var 'bg_base',
+		background_color = transparent,
 		border_bottom = { rem(1), solid, var 'bg_main' },
 	},
 

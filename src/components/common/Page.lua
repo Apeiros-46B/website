@@ -13,7 +13,17 @@ local narrow_grid_template = ('minmax(0, %drem)'):format(
 GlobalStyles {
 	Rule 'body' {
 		overflow = hidden,
-		height = pct(100),
+		height = vh(100),
+		background_size = cover,
+		background_repeat = no_repeat,
+		background_position = center,
+		background_image = 'url("/assets/background-light.svg")',
+	},
+
+	Query '@media' { prefers_color_scheme = 'dark' } {
+		Rule 'body' {
+			background_image = 'url("/assets/background-dark.svg")',
+		},
 	},
 
 	Rule 'main' {
