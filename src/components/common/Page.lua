@@ -11,6 +11,10 @@ local narrow_grid_template = ('minmax(0, %drem)'):format(
 )
 
 GlobalStyles {
+	Rule '@view-transition' {
+		navigation = auto,
+	},
+
 	Rule 'body' {
 		overflow = hidden,
 		height = vh(100),
@@ -173,6 +177,20 @@ return Component.new('Page', function(_, _, args, ctx)
 				rel = 'icon',
 				type = 'image/svg+xml',
 				href = '/assets/favicon.svg',
+			},
+			link {
+				rel = 'preload',
+				as = 'image',
+				type = 'image/svg+xml',
+				href = '/assets/background-light.svg',
+				media = '(prefers-color-scheme: light)',
+			},
+			link {
+				rel = 'preload',
+				as = 'image',
+				type = 'image/svg+xml',
+				href = '/assets/background-dark.svg',
+				media = '(prefers-color-scheme: dark)',
 			},
 			LinkGlobalStyles,
 			script {
