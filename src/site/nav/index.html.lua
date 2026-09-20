@@ -133,9 +133,9 @@ return { ord = 1 }, Page {
 			' with varying degrees of usefulness.',
 			[[
 				Currently, I'm mainly interested in game development, graphics programming,
-				and operating system development, and I might begin exploring compilers and DSP
-				in the near future. My preferred programming languages are Rust, Zig and Lua,
-				and I am also familiar with C++, Java, Python, TypeScript, and various others.
+				and systems programming, and I might begin exploring compilers and DSP in the
+				near future. My preferred programming languages are Rust, Zig and Lua, and I am
+				also familiar with C++, Java, Python, TypeScript, and various others.
 			]],
 		},
 		-- }}}
