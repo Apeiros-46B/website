@@ -35,23 +35,46 @@ return Provide {
 				]],
 			},
 
-			p {
-				'The light mode colorscheme used on this website is my own colorscheme, ',
-				a {
-					href = 'https://github.com/Apeiros-46B/elysium',
-					'elysium',
+			Section 'theme' {
+				p {
+					'The light mode color palette used on this website is my own theme, ',
+					a {
+						href = 'https://github.com/Apeiros-46B/elysium',
+						'elysium',
+					},
+					', and the dark mode color palette is ',
+					a {
+						href = 'https://github.com/sainnhe/everforest',
+						'Everforest by sainnhe',
+					},
+					' ("Hard Dark" variant, prior to ',
+					a {
+						href = 'https://github.com/sainnhe/everforest/commit/c7d3ffec0a4725c5154c824f0d036fa26a40232a',
+						'c7d3ffe',
+					},
+					'). The background artwork was made and matched to the palettes using ',
+					a { href = 'https://www.blender.org/', 'Blender' },
+					', ',
+					a { href = 'https://www.affinity.studio/', 'Affinity' },
+					', and ',
+					a { href = 'https://github.com/ozwaldorf/lutgen-rs', 'lutgen' },
+					'.',
 				},
-				', and the dark mode colorscheme is ',
-				a {
-					href = 'https://github.com/sainnhe/everforest',
-					'Everforest by sainnhe',
-				},
-				' ("Hard Dark" variant, prior to ',
-				a {
-					href = 'https://github.com/sainnhe/everforest/commit/c7d3ffec0a4725c5154c824f0d036fa26a40232a',
-					'c7d3ffe',
-				},
-				').'
+			},
+
+			Section 'generative AI stance' {
+				p [[
+					All non-code content on this website is entirely human-authored; AI tools
+					are not involved. I do occasionally use LLMs for programming assistance in
+					software projects (including this website), but I never use generative AI
+					for writing prose, generating images, or otherwise creating non-code
+					artifacts.
+				]],
+				p [[
+					I personally think the technology is interesting and can certainly be useful
+					across a wide range of fields (especially software) if used correctly, but
+					I do not believe it should be applied to creative or artistic endeavours.
+				]],
 			},
 		},
 	},

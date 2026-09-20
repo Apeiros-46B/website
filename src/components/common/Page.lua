@@ -10,6 +10,75 @@ local narrow_grid_template = ('minmax(0, %drem)'):format(
 	layout.page_content_width_rem
 )
 
+local background_sz = { 800, 1200, 1920, 2560, 3840 }
+-- {{{ generate background css and preloads
+local backgrounds = {
+	css_rules = {},
+	preloads = {},
+}
+do
+	local r = backgrounds.css_rules
+	local p = backgrounds.preloads
+
+	local function query(scheme, sz, min_width, max_width)
+		local src
+		-- versions/cache busting may change separately for the two schemes
+		if scheme == 'light' then
+			src = 'https://cdn-proxy.apeiros.workers.dev/v2/bg-light-' .. sz .. '.webp'
+		else
+			src = 'https://cdn-proxy.apeiros.workers.dev/v3/bg-dark-' .. sz .. '.webp'
+		end
+
+		local conds = {}
+		-- light is the fallback; the dark rule overrides it when supported
+		if scheme ~= 'light' then
+			conds.prefers_color_scheme = scheme
+		end
+		if min_width then
+			conds.min_width = px(min_width)
+		end
+
+		local rule = Rule 'body' { background_image = url(src) }
+		if next(conds) then
+			rule = Query('@media')(conds) { rule }
+		end
+
+		-- prevent the browser from preloading multiple images
+		local media = ('(prefers-color-scheme: %s)'):format(scheme)
+		if min_width then
+			media = media .. (' and (min-width: %s)'):format(px(min_width))
+		end
+		if max_width then
+			media = media .. (' and (max-width: %s)'):format(px(max_width))
+		end
+
+		local preload = link {
+			rel = 'preload',
+			as = 'image',
+			type = 'image/webp',
+			href = src,
+			media = media,
+		}
+
+		return rule, preload
+	end
+
+	local prev_sz
+	for i, sz in ipairs(background_sz) do
+		local min_width = prev_sz and prev_sz + 1
+		local max_width = i < #background_sz and sz
+		local rl, pl = query('light', sz, min_width, max_width)
+		local rd, pd = query('dark', sz, min_width, max_width)
+
+		r[#r+1] = rl
+		r[#r+1] = rd
+		p[#p+1] = pl
+		p[#p+1] = pd
+		prev_sz = sz
+	end
+end
+-- }}}
+
 GlobalStyles {
 	Rule '@view-transition' {
 		navigation = auto,
@@ -21,14 +90,9 @@ GlobalStyles {
 		background_size = cover,
 		background_repeat = no_repeat,
 		background_position = center,
-		background_image = 'url("/assets/background-light.svg")',
 	},
 
-	Query '@media' { prefers_color_scheme = 'dark' } {
-		Rule 'body' {
-			background_image = 'url("/assets/background-dark.svg")',
-		},
-	},
+	backgrounds.css_rules,
 
 	Rule 'main' {
 		width = pct(100),
@@ -178,20 +242,8 @@ return Component.new('Page', function(_, _, args, ctx)
 				type = 'image/svg+xml',
 				href = '/assets/favicon.svg',
 			},
-			link {
-				rel = 'preload',
-				as = 'image',
-				type = 'image/svg+xml',
-				href = '/assets/background-light.svg',
-				media = '(prefers-color-scheme: light)',
-			},
-			link {
-				rel = 'preload',
-				as = 'image',
-				type = 'image/svg+xml',
-				href = '/assets/background-dark.svg',
-				media = '(prefers-color-scheme: dark)',
-			},
+			backgrounds.preloads,
+			Fonts,
 			LinkGlobalStyles,
 			script {
 				defer = true,

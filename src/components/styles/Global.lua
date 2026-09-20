@@ -1,10 +1,5 @@
 local palette = require('src.data.palette')
 
-GlobalStyles(0, {
-	Import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap',
-	Import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap',
-})
-
 GlobalStyles(1, {
 	-- {{{ CSS reset
 	-- http://meyerweb.com/eric/tools/css/reset/
