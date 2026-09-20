@@ -1,4 +1,5 @@
-return { ord = 4 }, Page {
+-- TODO: re-enable when i have content
+return { ord = 4, skip = true }, Page {
 	title = 'blog',
 	desc = "Read Apeiros' articles on miscellaneous technical topics.",
 	head = {},
