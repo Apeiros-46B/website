@@ -62,7 +62,9 @@ export default {
 			return notFound();
 		}
 
-		const obj = await env.WEBSITE.get(key);
+		const obj = request.method === "HEAD"
+			? await env.WEBSITE.head(key)
+			: await env.WEBSITE.get(key);
 		if (obj === null) {
 			return notFound();
 		}
@@ -76,6 +78,7 @@ export default {
 		hdrs.set("ETag", obj.httpEtag);
 		hdrs.set("X-Content-Type-Options", "nosniff");
 
-		return new Response(obj.body, { headers: hdrs });
+		const body = request.method === "HEAD" ? null : obj.body;
+		return new Response(body, { headers: hdrs });
 	},
 } satisfies ExportedHandler<Env>;
