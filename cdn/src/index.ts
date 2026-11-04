@@ -1,4 +1,3 @@
-const ALLOWED_PATH = /^\/v[0-9]+\/[^/]*\.webp$/;
 const EDGE_CACHE_CONTROL = "public, max-age=315360000";
 const IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable";
 const NOT_FOUND_CACHE_CONTROL = "public, max-age=60";
@@ -13,7 +12,7 @@ function getKey(url: URL): string | null {
 		return null;
 	}
 
-	if (!ALLOWED_PATH.test(path) || /[\u0000-\u001f\u007f]/.test(path)) {
+	if (path === "/" || /[\u0000-\u001f\u007f]/.test(path)) {
 		return null;
 	}
 
@@ -62,9 +61,17 @@ export default {
 			return notFound();
 		}
 
-		const obj = request.method === "HEAD"
-			? await env.WEBSITE.head(key)
-			: await env.WEBSITE.get(key);
+		let obj: R2Object | R2ObjectBody | null;
+		let body: R2ObjectBody["body"] | null = null;
+
+		if (request.method === "HEAD") {
+			obj = await env.WEBSITE.head(key);
+		} else {
+			const objectBody = await env.WEBSITE.get(key);
+			obj = objectBody;
+			body = objectBody?.body ?? null;
+		}
+
 		if (obj === null) {
 			return notFound();
 		}
@@ -74,11 +81,12 @@ export default {
 		hdrs.set("Cache-Control", IMMUTABLE_CACHE_CONTROL);
 		hdrs.set("Cloudflare-CDN-Cache-Control", EDGE_CACHE_CONTROL);
 		hdrs.set("Content-Length", obj.size.toString());
-		hdrs.set("Content-Type", "image/webp");
+		if (!hdrs.has("Content-Type")) {
+			hdrs.set("Content-Type", "application/octet-stream");
+		}
 		hdrs.set("ETag", obj.httpEtag);
 		hdrs.set("X-Content-Type-Options", "nosniff");
 
-		const body = request.method === "HEAD" ? null : obj.body;
 		return new Response(body, { headers: hdrs });
 	},
 } satisfies ExportedHandler<Env>;

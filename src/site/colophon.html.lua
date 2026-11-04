@@ -2,7 +2,7 @@ return Provide {
 	nav_ephemeral_page = 'colophon',
 	Page {
 		title = 'colophon',
-		desc = 'Learn about how this website was built using Lua.',
+		desc = 'Learn about how this website was built.',
 		head = {},
 		content = {
 			h1 'colophon',
@@ -62,18 +62,12 @@ return Provide {
 				},
 			},
 
-			Section 'generative AI stance' {
+			-- empl*yment
+			Section 'generative AI usage' {
 				p [[
-					All non-code content on this website is entirely human-authored; AI tools
-					are not involved. I do occasionally use LLMs for programming assistance in
-					software projects (including this website), but I never use generative AI
-					for writing prose, generating images, or otherwise creating non-code
-					artifacts.
-				]],
-				p [[
-					I personally think the technology is interesting and can certainly be useful
-					across a wide range of fields (especially software) if used correctly, but
-					I do not believe it should be applied to creative or artistic endeavours.
+					The content on this website is entirely human-written. LLM-based tools are
+					lightly used for some of my software projects, but I do not use GenAI
+					to assist in the creation of images, videos, or music.
 				]],
 			},
 		},
