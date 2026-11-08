@@ -75,7 +75,8 @@ local projects = {
 	{
 		name = 'lwk',
 		url = 'https://github.com/Apeiros-46B/lwk',
-		start_date = '2026-03',
+		start_date = '2026-02',
+		end_date = '2026-03',
 		stack = { 'Lua', 'HTML', 'CSS' },
 		is_a = '(Lua Website Kit) is a web templating engine/SSG in ~1300 SLOC.',
 		desc = [[
